@@ -1,0 +1,33 @@
+### Maven 构建产物 ###
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### 含本地敏感信息（虚拟机IP、数据库密码）的环境配置，不上传 ###
+**/application-dev.yaml
+**/application-local.yaml
+
+### 日志 ###
+logs/
+**/logs/
+*.log
+
+### IntelliJ IDEA ###
+.idea/
+*.iml
+*.iws
+*.ipr
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
