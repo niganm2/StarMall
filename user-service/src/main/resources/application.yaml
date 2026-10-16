@@ -47,5 +47,5 @@ hm:
   jwt:
     location: classpath:hmall.jks
     alias: hmall
-    password: hmall123
+    password: ${hm.jwt.password}
     tokenTTL: 30m
