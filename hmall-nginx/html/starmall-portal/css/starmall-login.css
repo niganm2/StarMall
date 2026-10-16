@@ -1,0 +1,105 @@
+/* ============================================================
+   星购商城 StarMall 登录页样式
+   主色：星空蓝 #2B59C3  辅助色：星光黄 #FFB703
+   圆角：卡片12px / 按钮6px / 输入框4px
+   说明：追加覆盖样式，需在原 CSS 之后引入
+   ============================================================ */
+:root {
+  --primary-color: #2B59C3;
+  --secondary-color: #FFB703;
+  --aside-bg: #F0F4FD;
+  --text-main: #212529;
+  --text-second: #666666;
+  --border-color: #E5E9F2;
+}
+
+/* ---- 1. 页面整体背景：浅蓝白，避免大面积纯白 ---- */
+body {
+  background-color: #F0F4FD;
+}
+/* 顶部 Logo 区域保持白色 */
+.logoArea {
+  background: #ffffff;
+}
+
+/* ---- 2. Banner 区域：紫色底 → 深蓝底（背景图已换星空蓝视觉） ---- */
+.loginArea {
+  background-color: #16307A !important;
+}
+.login {
+  background: url(../img/loginbg.png?v=20261015) no-repeat !important;
+}
+
+/* ---- 3. 登录卡片：12px 圆角 + 柔和阴影 + 浅边框 ---- */
+.loginform {
+  border-radius: 12px !important;
+  box-shadow: 0 8px 24px rgba(43, 89, 195, 0.12) !important;
+  border: 1px solid #E5E9F2 !important;
+}
+
+/* ---- 4. 扫码/账户切换：激活星空蓝，非激活深灰 ---- */
+.sui-nav.nav-tabs.tab-wraped > li > a h3 {
+  color: #666666;
+}
+.sui-nav.nav-tabs.tab-wraped > li.active > a h3,
+.sui-nav.nav-tabs.tab-wraped > li.active h3 {
+  color: #2B59C3 !important;
+}
+.sui-nav.nav-tabs.tab-wraped > li.active > a {
+  border-top: 2px solid #2B59C3 !important;
+}
+
+/* ---- 5. 输入框：浅边框 4px 圆角，focus 星空蓝 ---- */
+.sui-form .input-prepend .add-on {
+  background-color: #F0F4FD !important;
+  border: 1px solid #E5E9F2;
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+}
+.sui-form input[type=text],
+.sui-form input[type=password] {
+  border: 1px solid #E5E9F2 !important;
+  border-radius: 0 4px 4px 0 !important;
+  box-shadow: none !important;
+}
+.sui-form input[type=text]:focus,
+.sui-form input[type=password]:focus {
+  border-color: #2B59C3 !important;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(43, 89, 195, 0.12) !important;
+}
+
+/* ---- 6. 登录按钮：红色 → 星空蓝渐变，6px 圆角 ---- */
+.loginform .btn-danger,
+.loginArea .btn-danger {
+  background: linear-gradient(180deg, #3572E6 0%, #2B59C3 100%) !important;
+  background-color: #2B59C3 !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 6px !important;
+}
+.loginform .btn-danger:hover,
+.loginArea .btn-danger:hover {
+  background: #2248a3 !important;
+  background-color: #2248a3 !important;
+}
+
+/* ---- 7. 底部版权区域 ---- */
+.copyright {
+  padding: 24px 0 30px;
+  color: #666666;
+  text-align: center;
+  line-height: 24px;
+}
+.copyright ul li {
+  color: #666666;
+  border-right: 1px solid #bbbbbb !important;
+  padding: 0 20px;
+  margin: 10px 0;
+}
+.copyright ul li:last-child {
+  border-right: 0 !important;
+}
+.copyright p {
+  margin: 4px 0;
+}

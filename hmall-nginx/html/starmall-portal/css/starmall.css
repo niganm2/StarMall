@@ -1,0 +1,503 @@
+/* ============================================================
+   星购商城 StarMall 全局样式覆盖
+   主色：星空蓝 #2B59C3  辅助色：星光黄 #FFB703
+   说明：本文件为追加覆盖样式，需在原 CSS 之后引入
+   ============================================================ */
+
+/* ========== 全局CSS变量定义 ========== */
+:root {
+  --primary-color: #2B59C3; /*星空蓝主色*/
+  --secondary-color: #FFB703; /*星光黄辅助色*/
+  --aside-bg: #F0F4FD; /*左侧分类栏背景*/
+  --text-main: #212529;
+  --text-second: #666666;
+  --border-color: #E5E9F2;
+  --radius-sm: 4px;   /*小元素圆角：按钮、标签*/
+  --radius-md: 8px;   /*模块卡片圆角：商品卡片、小板块*/
+  --radius-lg: 12px;  /*大板块圆角：轮播banner、侧边栏、右侧快讯盒子*/
+}
+
+/* 1. 左侧分类侧边栏：去掉原红色背景，大圆角 */
+.left-category {
+  background-color: var(--aside-bg) !important;
+  border-radius: var(--radius-lg) !important;
+  overflow: hidden !important;
+}
+.left-category li:hover {
+  background-color: var(--primary-color) !important;
+  color:#fff !important;
+}
+
+/* 2. 顶部搜索按钮，改为星空蓝，小圆角 */
+.search-btn {
+  background-color: var(--primary-color)!important;
+  color:#fff !important;
+  border-radius: var(--radius-sm) !important;
+  border:none !important;
+}
+.search-btn:hover {
+  background-color:#2248a3 !important;
+}
+
+/*3. 所有促销标签、活动角标，星光黄，小圆角*/
+.tag-sale,.tag-discount {
+  background-color: var(--secondary-color)!important;
+  color:#212529 !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+/*4. 商品卡片、内容模块盒子，中等圆角+柔和阴影*/
+.goods-card,.module-item,.info-card,.right-news-box {
+  border-radius: var(--radius-md) !important;
+  box-shadow:0 2px 8px rgba(43, 89, 195, 0.1) !important;
+}
+
+/*5. 首页轮播Banner大盒子，大圆角 */
+.banner-wrap{
+  border-radius: var(--radius-lg)!important;
+  overflow:hidden !important;
+}
+
+/*6. 导航栏hover高亮颜色替换为星空蓝*/
+.top-nav a:hover{
+  color:var(--primary-color)!important;
+}
+
+/*7. 价格文字使用星光黄突出*/
+.price-text{
+  color:var(--secondary-color)!important;
+}
+
+/*8. 清除页面原有红色全局样式覆盖*/
+*[style*="background-color:red"],
+*[style*="background-color:#dd2222"]{
+  background-color:unset !important;
+}
+
+/*9. 全局所有容器盒子统一增加圆角，消除原版尖锐直角感*/
+section,.content-wrap,.panel{
+  border-radius: var(--radius-md)!important;
+}
+
+/* ============================================================
+   以下为真实页面选择器映射：让上述规范在实际页面结构中生效
+   ============================================================ */
+
+/* ---- 1. 左侧分类侧边栏（原 #c81623 红底 → 浅蓝底大圆角） ---- */
+.SortList .all-sort-list {
+  background-color: var(--aside-bg) !important;
+  background: var(--aside-bg) !important;
+  border-radius: var(--radius-lg) !important;
+  overflow: hidden !important;
+}
+.sort .all-sort-list2 .item h3 a {
+  color: var(--text-main) !important;
+}
+.sort .all-sort-list2 .item:hover h3,
+.sort .all-sort-list2 .hover h3 {
+  background: var(--primary-color) !important;
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+.sort .all-sort-list2 .item:hover h3 a,
+.sort .all-sort-list2 .hover h3 a {
+  color: #fff !important;
+}
+.sort .all-sort-list2 .item span {
+  color: var(--primary-color) !important;
+}
+
+/* ---- 2. 搜索区（原红边红按钮 → 星空蓝） ---- */
+.search .input-append .input-error {
+  border: 2px solid var(--primary-color) !important;
+}
+.search .input-append .btn-danger,
+.header .search .btn-danger {
+  background: var(--primary-color) !important;
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  color: #fff !important;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important;
+}
+.search .input-append .btn-danger:hover {
+  background: #2248a3 !important;
+  background-color: #2248a3 !important;
+}
+.search .input-append .input-xxlarge {
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm) !important;
+}
+
+/* ---- 3. 促销小字导航（首个原红色 → 星空蓝加粗） ---- */
+.hotwords ul li {
+  color: var(--text-second);
+}
+.hotwords ul li:first-child {
+  color: var(--primary-color) !important;
+  font-weight: 700;
+}
+.hotwords ul li:hover {
+  color: var(--primary-color) !important;
+  cursor: pointer;
+}
+
+/* ---- 4. 顶部快捷导航 & 主导航 hover → 星空蓝 ---- */
+.shortcut a:hover {
+  color: var(--primary-color) !important;
+}
+.navArea ul.nav li:hover {
+  color: var(--primary-color) !important;
+  cursor: pointer;
+}
+.navArea ul.nav li a:hover {
+  color: var(--primary-color) !important;
+}
+
+/* ---- 5. 右侧快讯盒子：大圆角 + 柔和阴影 ---- */
+.news {
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: 0 2px 8px rgba(43, 89, 195, 0.1) !important;
+  overflow: hidden;
+}
+.news h4 em.fl {
+  color: var(--primary-color);
+  font-style: normal;
+  font-weight: 700;
+}
+.news-list .bold {
+  color: var(--primary-color);
+}
+
+/* ---- 6. 生活服务图标：替换原 icons.png 精灵图 ---- */
+.Lifeservice .life-item .list-item {
+  background-image: none !important;
+}
+.list-item-1, .list-item-2, .list-item-3, .list-item-4,
+.list-item-5, .list-item-6, .list-item-7, .list-item-8,
+.list-item-9, .list-item-10, .list-item-11, .list-item-12 {
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-size: 30px 30px !important;
+}
+/* 选择器加前缀提升特异性，必须高于上方 none 规则的 (0,3,0) */
+.Lifeservice .life-item .list-item-1  { background-image: url(../img/icon-life-1.png)  !important; }
+.Lifeservice .life-item .list-item-2  { background-image: url(../img/icon-life-2.png)  !important; }
+.Lifeservice .life-item .list-item-3  { background-image: url(../img/icon-life-3.png)  !important; }
+.Lifeservice .life-item .list-item-4  { background-image: url(../img/icon-life-4.png)  !important; }
+.Lifeservice .life-item .list-item-5  { background-image: url(../img/icon-life-5.png)  !important; }
+.Lifeservice .life-item .list-item-6  { background-image: url(../img/icon-life-6.png)  !important; }
+.Lifeservice .life-item .list-item-7  { background-image: url(../img/icon-life-7.png)  !important; }
+.Lifeservice .life-item .list-item-8  { background-image: url(../img/icon-life-8.png)  !important; }
+.Lifeservice .life-item .list-item-9  { background-image: url(../img/icon-life-9.png)  !important; }
+.Lifeservice .life-item .list-item-10 { background-image: url(../img/icon-life-10.png) !important; }
+.Lifeservice .life-item .list-item-11 { background-image: url(../img/icon-life-11.png) !important; }
+.Lifeservice .life-item .list-item-12 { background-image: url(../img/icon-life-12.png) !important; }
+
+/* ---- 7. 首页轮播 Banner：大圆角 ---- */
+.banerArea .sui-carousel {
+  border-radius: var(--radius-lg) !important;
+  overflow: hidden !important;
+}
+.banerArea .sui-carousel .carousel-inner,
+.banerArea .sui-carousel .carousel-inner .item {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.floorBanner .sui-carousel {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+/* ---- 8. 购物车数量角标：红底 → 星光黄 ---- */
+.shopnum {
+  background: var(--secondary-color) !important;
+  color: var(--text-main) !important;
+}
+
+/* ---- 9. 今日推荐区块（深灰块 → 星空蓝；整行中圆角） ---- */
+.Recommend {
+  border-radius: var(--radius-md) !important;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(43, 89, 195, 0.1);
+}
+.clock {
+  background-color: var(--primary-color) !important;
+}
+
+/* ---- 10. 猜你喜欢：卡片中圆角 + 价格星光黄 ---- */
+.like .Favourate {
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: 0 2px 8px rgba(43, 89, 195, 0.1) !important;
+  overflow: hidden;
+}
+.like-text h3 {
+  color: var(--secondary-color) !important;
+}
+
+/* ---- 11. 楼层标题与边框：红 → 星空蓝 ---- */
+.floors h3 {
+  color: var(--primary-color) !important;
+}
+.floor .floor-content {
+  border-color: var(--primary-color) !important;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.floor .nav-tabs li.active a,
+.floor .nav-tabs li a:hover {
+  color: var(--primary-color) !important;
+}
+.floor .blockgary {
+  border-radius: var(--radius-md);
+}
+
+/* ---- 12. 品牌墙圆角 ---- */
+.brand .Brand-list {
+  border-radius: var(--radius-md) !important;
+}
+
+/* ---- 13. 头部底部分隔线：红 → 星空蓝 ---- */
+.header {
+  border-bottom-color: var(--primary-color) !important;
+}
+
+/* ---- 14. “换一换”按钮：精灵图红底 → 星空蓝小圆角 ---- */
+.like .title .tip,
+.title .tip {
+  background-image: none !important;
+  background-color: var(--primary-color);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+/* ============================================================
+   强力覆盖补丁：使用直接色值 + 更高优先级选择器，
+   确保覆盖原框架红色样式
+   ============================================================ */
+html body .header .search .input-append button.btn-danger,
+html body .search .input-append button.btn-danger {
+  background: #2B59C3 !important;
+  background-color: #2B59C3 !important;
+  border-color: #2B59C3 !important;
+  color: #ffffff !important;
+}
+html body .search .input-append button.btn-danger:hover {
+  background: #2248a3 !important;
+  background-color: #2248a3 !important;
+}
+html body .title.floors h3.fl,
+html body .floors h3 {
+  color: #2B59C3 !important;
+}
+html body .floor .floor-content {
+  border-top-color: #2B59C3 !important;
+}
+html body .floors .sui-nav.nav-tabs > .active > a,
+html body .floors .sui-nav.nav-tabs > li > a:hover {
+  color: #2B59C3 !important;
+}
+html body .SortList .all-sort-list {
+  background: #F0F4FD !important;
+}
+html body .sort .all-sort-list2 .item h3 a {
+  color: #212529 !important;
+}
+html body .hotwords ul li:first-child {
+  color: #2B59C3 !important;
+}
+
+/* ============================================================
+   页面下半部分 UI 统一（猜你喜欢/楼层/品牌栏/底部服务区）
+   规范规则（原样保留）
+   ============================================================ */
+
+/* 1. 猜你喜欢、家用电器、手机通讯 整个板块外容器 */
+.goods-section{
+  border-radius: var(--radius-lg)!important;
+  overflow:hidden !important;
+  background:#ffffff;
+  box-shadow:0 2px 8px rgba(43, 89, 195, 0.1)!important;
+  border:1px solid var(--border-color)!important;
+}
+
+/* 2. 板块标题文字（猜你喜欢 / 家用电器 / 手机通讯）*/
+.section-title{
+  color: var(--primary-color)!important;
+  font-weight:bold;
+}
+/* 板块右侧子分类标签（热门、大家电等）hover变成星空蓝 */
+.section-sub-nav a:hover{
+  color:var(--primary-color)!important;
+}
+
+/*3. 商品卡片盒子（猜你喜欢横向商品卡片、家电分类小卡片）*/
+.item-card{
+  border-radius: var(--radius-md)!important;
+  overflow:hidden !important;
+  border:1px solid var(--border-color)!important;
+  transition: all 0.2s ease;
+}
+.item-card:hover{
+  box-shadow:0 4px 12px rgba(43, 89, 195, 0.15)!important;
+  transform: translateY(-2px);
+}
+
+/*4. 商品价格文字，统一星光黄 */
+.item-price{
+  color:var(--secondary-color)!important;
+  font-weight:bold;
+}
+
+/*5. 促销标签样式（满减、活动小字标签）*/
+.promotion-tag{
+  background-color: var(--secondary-color)!important;
+  color:#212529 !important;
+  border-radius: var(--radius-sm)!important;
+}
+
+/*6. 底部品牌logo栏（西门子、美的等品牌行）*/
+.brand-bar{
+  border-radius: var(--radius-lg)!important;
+  background:#ffffff !important;
+  border:1px solid var(--border-color)!important;
+}
+.brand-bar img{
+  filter: grayscale(20%);
+  transition:0.2s;
+}
+.brand-bar img:hover{
+  filter:grayscale(0%);
+}
+
+/*7. 底部服务信息大区域（正品保障、购物指南、二维码那块）*/
+.footer-wrap{
+  background-color:#F0F4FD !important;
+  border-radius: var(--radius-lg)!important;
+  padding:24px !important;
+}
+.footer-wrap .footer-title{
+  color:var(--primary-color)!important;
+  font-weight:bold;
+}
+.footer-wrap a{
+  color:#444444 !important;
+}
+.footer-wrap a:hover{
+  color:var(--primary-color)!important;
+}
+
+/*8. 底部红色圆形图标（正品保障）替换颜色，改成星空蓝圆形底色白色图标 */
+.footer-icon-circle{
+  background-color: var(--primary-color)!important;
+  color:#fff !important;
+}
+
+/* ============================================================
+   下半部分真实选择器映射
+   ============================================================ */
+
+/* ---- 15. 猜你喜欢 & 楼层板块：白底大卡 + 12px 圆角 ---- */
+.like .py-container,
+.floor .py-container {
+  background: #ffffff;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: 0 2px 8px rgba(43, 89, 195, 0.1) !important;
+  overflow: hidden;
+}
+
+/* ---- 16. 板块标题：星空蓝加粗（猜你喜欢/家用电器/手机通讯） ---- */
+.like .title h3,
+.floors h3 {
+  color: var(--primary-color) !important;
+  font-weight: bold;
+}
+
+/* ---- 17. 楼层右侧子分类标签 hover → 星空蓝 ---- */
+.floors .sui-nav.nav-tabs > li > a:hover {
+  color: var(--primary-color) !important;
+}
+.floor .jd-list li:hover {
+  color: var(--primary-color);
+  cursor: pointer;
+}
+
+/* ---- 18. 猜你喜欢商品卡片：8px 圆角 + hover 轻微上浮 ---- */
+.like .picDl dd {
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-md) !important;
+  overflow: hidden !important;
+  background: #ffffff;
+  margin: 3px 2px;
+  transition: all 0.2s ease;
+}
+.like .picDl dd:hover {
+  box-shadow: 0 4px 12px rgba(43, 89, 195, 0.15) !important;
+  transform: translateY(-2px);
+}
+/* 去掉原卡片间灰色分隔竖线 */
+.like ul li .like-text {
+  border-right: none !important;
+}
+
+/* ---- 19. 底部品牌栏：12px 圆角白底 + logo 灰度交互 ---- */
+.brand .Brand-list {
+  border-radius: var(--radius-lg) !important;
+  background: #ffffff !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: 0 2px 8px rgba(43, 89, 195, 0.1);
+}
+.brand .Brand-item img {
+  filter: grayscale(20%);
+  transition: 0.2s;
+}
+.brand .Brand-item img:hover {
+  filter: grayscale(0%);
+}
+
+/* ---- 20. 底部服务信息大区域：灰底 → 浅蓝 + 12px 圆角 ---- */
+/* Vue 渲染后内联样式会被序列化为 rgb()，用属性前缀匹配 */
+div.py-container[style*="background-color"] {
+  background-color: #F0F4FD !important;
+  border-radius: var(--radius-lg) !important;
+}
+.Mod-list {
+  border-top-color: var(--border-color) !important;
+  border-bottom-color: var(--border-color) !important;
+}
+
+/* 底部指南列标题与链接 */
+.Mod-list h4 {
+  color: var(--primary-color) !important;
+  font-weight: bold;
+}
+.Mod-list li {
+  color: #444444;
+}
+.Mod-list li:hover {
+  color: var(--primary-color);
+  cursor: pointer;
+}
+
+/* ---- 21. 底部服务图标：红色精灵图 → 星空蓝圆形白图标 ---- */
+.grid-service-item .serivce-item {
+  background-image: none !important;
+  background-repeat: no-repeat;
+  background-position: center center !important;
+  background-size: 49px 50px !important;
+}
+.intro1 .serivce-item { background-image: url(../img/icon-foot-1.png) !important; }
+.intro2 .serivce-item { background-image: url(../img/icon-foot-2.png) !important; }
+.intro3 .serivce-item { background-image: url(../img/icon-foot-3.png) !important; }
+.intro4 .serivce-item { background-image: url(../img/icon-foot-4.png) !important; }
+.intro5 .serivce-item { background-image: url(../img/icon-foot-5.png) !important; }
+
+/* ---- 22. 版权区域文字颜色统一 ---- */
+.Mod-copyright {
+  color: var(--text-second);
+}
+.Mod-copyright ul.helpLink li .space {
+  border-left-color: #bbbbbb !important;
+}
