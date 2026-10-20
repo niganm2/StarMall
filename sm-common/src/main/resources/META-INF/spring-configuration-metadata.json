@@ -1,0 +1,108 @@
+{
+  "groups": [
+    {
+      "name": "sm.db"
+    },
+    {
+      "name": "sm.swagger"
+    },
+    {
+      "name": "sm.jwt",
+      "type": "com.small.config.SecurityConfig",
+      "sourceType": "com.small.config.JwtProperties"
+    },
+    {
+      "name": "sm.auth",
+      "type": "com.small.config.MvcConfig",
+      "sourceType": "com.small.config.AuthProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "sm.db.host",
+      "type": "java.lang.String",
+      "description": "数据库地址",
+      "defaultValue": "192.168.150.101"
+    },
+    {
+      "name": "sm.db.port",
+      "type": "java.lang.Integer",
+      "description": "数据库端口",
+      "defaultValue": "3306"
+    },
+    {
+      "name": "sm.db.database",
+      "type": "java.lang.String",
+      "description": "数据库database名",
+      "defaultValue": ""
+    },
+    {
+      "name": "sm.db.un",
+      "type": "java.lang.String",
+      "description": "数据库用户名",
+      "defaultValue": "root"
+    },
+    {
+      "name": "sm.db.pw",
+      "type": "java.lang.String",
+      "description": "数据库密码",
+      "defaultValue": "123"
+    },
+    {
+      "name": "sm.swagger.title",
+      "type": "java.lang.String",
+      "description": "接口文档标题"
+    },
+    {
+      "name": "sm.swagger.description",
+      "type": "java.lang.String",
+      "description": "接口文档描述"
+    },
+    {
+      "name": "sm.swagger.email",
+      "type": "java.lang.String",
+      "description": "接口文档联系人邮箱"
+    },
+    {
+      "name": "sm.swagger.concat",
+      "type": "java.lang.String",
+      "description": "接口文档联系人"
+    },
+    {
+      "name": "sm.swagger.package",
+      "type": "java.lang.String",
+      "description": "接口controller扫描包"
+    },
+    {
+      "name": "sm.jwt.location",
+      "type": "java.lang.String",
+      "description": "秘钥存储地址"
+    },
+    {
+      "name": "sm.jwt.alias",
+      "type": "java.lang.String",
+      "description": "秘钥别名"
+    },
+    {
+      "name": "sm.jwt.password",
+      "type": "java.lang.String",
+      "description": "秘钥文件密码"
+    },
+    {
+      "name": "sm.jwt.tokenTTL",
+      "type": "java.time.Duration",
+      "description": "登录有效期"
+    },
+    {
+      "name": "sm.auth.excludePaths",
+      "type": "java.util.List",
+      "description": "登录放行的路径"
+    },
+    {
+      "name": "sm.auth.includePaths",
+      "type": "java.util.List",
+      "description": "登录拦截的路径"
+    }
+  ],
+  "hints": []
+}

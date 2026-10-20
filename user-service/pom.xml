@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.heima</groupId>
-        <artifactId>small</artifactId>
+        <artifactId>StarMall</artifactId>
         <version>1.0.0</version>
     </parent>
 
@@ -22,7 +22,7 @@
         <!--common-->
         <dependency>
             <groupId>com.heima</groupId>
-            <artifactId>hm-common</artifactId>
+            <artifactId>sm-common</artifactId>
             <version>1.0.0</version>
         </dependency>
         <!--web-->
@@ -51,10 +51,20 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
-        <!--hm-api-->
+        <!--统一配置管理-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+        <!--读取bootstrap文件-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
+        <!--sm-api-->
         <dependency>
             <groupId>com.yule</groupId>
-            <artifactId>hm-api</artifactId>
+            <artifactId>sm-api</artifactId>
             <version>1.0.0</version>
         </dependency>
     </dependencies>

@@ -1,10 +1,6 @@
 server:
   port: 8081
-hm:
-  db:
-    database: hm-item
+# 库名与 swagger 包路径已外置到 Nacos item-service.yaml；Redis/Sentinel/Seata 走共享配置
+sm:
   swagger:
     title: "星购商城商品服务接口文档"
-    package: com.hmall.item.controller
-seata:
-  tx-service-group: hmall

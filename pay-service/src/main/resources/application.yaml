@@ -1,5 +1,6 @@
 server:
   port: 8086
-feign:
-  okhttp:
-    enabled: true # 启用okhttp
+# 库名与 swagger 包路径已外置到 Nacos pay-service.yaml；Feign/MQ 走共享配置
+sm:
+  swagger:
+    title: "星购商城支付服务接口文档"

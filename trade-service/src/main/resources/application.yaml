@@ -1,13 +1,6 @@
 server:
   port: 8085
-hm:
-  db:
-    database: hm-trade
+# 库名与 swagger 包路径已外置到 Nacos trade-service.yaml；Feign/Sentinel/Seata/MQ 走共享配置
+sm:
   swagger:
     title: "星购商城交易服务接口文档"
-    package: com.hmall.trade.controller
-feign:
-  okhttp:
-    enabled: true # 启用okhttp
-seata:
-  tx-service-group: hmall

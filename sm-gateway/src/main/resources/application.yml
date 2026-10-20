@@ -1,0 +1,8 @@
+server:
+  port: 8080
+# tokenTTL 已外置到 Nacos shared-jwt.yaml；鉴权白名单已外置到 gateway.yaml
+sm:
+  jwt:
+    location: classpath:small.jks
+    alias: small
+    password: ${sm.jwt.password}

@@ -1,0 +1,33 @@
+server:
+  port: 8087
+spring:
+  application:
+    name: ai-service
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      server-addr: 192.168.100.128:8848
+      discovery:
+        enabled: true
+  ai:
+    # 默认模型，可被各场景的 DashScopeChatOptions 覆盖
+    dashscope:
+      chat:
+        options:
+          model: qwen-plus
+    chat:
+      memory:
+        repository:
+          jdbc:
+            initialize-schema: never
+logging:
+  level:
+    com.small: debug
+  pattern:
+    dateformat: HH:mm:ss:SSS
+  # 日志文件统一使用 UTF-8，避免中文提示在 Windows 默认 GBK 下变成乱码
+  charset:
+    file: UTF-8
+  file:
+    path: "logs/${spring.application.name}"

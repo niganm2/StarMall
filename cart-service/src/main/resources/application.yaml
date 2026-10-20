@@ -1,26 +1,12 @@
 server:
   port: 8082
+  # 以下为启动期参数，仍保留在本地（改了需重启，外置无收益）
   tomcat:
     threads:
       max: 30
     accept-count: 30
     max-connections: 100
-feign:
-  okhttp:
-    enabled: true # 启用okhttp
-  sentinel:
-    enabled: true # 启用sentinel监控
-hm:
-  db:
-    database: hm-cart
+# 库名、swagger 包路径、maxItems 已外置到 Nacos cart-service.yaml；Feign/Sentinel/Seata 走共享配置
+sm:
   swagger:
     title: "星购商城购物车服务接口文档"
-    package: com.hmall.cart.controller
-spring:
-  cloud:
-    sentinel:
-      transport:
-        dashboard: localhost:8090  # 配置sentinel控制台地址
-      http-method-specify: true # 允许使用http方法
-seata:
-  tx-service-group: hmall

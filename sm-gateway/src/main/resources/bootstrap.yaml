@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: gateway
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      server-addr: 192.168.100.128:8848
+      discovery:
+        enabled: true
+      config:
+        file-extension: yaml
+        shared-configs:
+          # 网关为 WebFlux 应用，无数据源与 knife4j 依赖，故不引入 shared-jdbc / shared-swagger
+          - data-id: shared-log.yaml
+          - data-id: shared-jwt.yaml
+          - data-id: gateway.yaml

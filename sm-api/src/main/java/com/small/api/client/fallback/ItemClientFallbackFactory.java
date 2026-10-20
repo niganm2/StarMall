@@ -1,0 +1,39 @@
+package com.small.api.client.fallback;
+
+import com.small.api.client.ItemClient;
+import com.small.api.dto.ItemDTO;
+import com.small.api.dto.OrderDetailDTO;
+import com.small.common.utils.CollUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.openfeign.FallbackFactory;
+import org.springframework.util.CollectionUtils;
+
+import java.util.Collection;
+import java.util.List;
+
+// 服务降级: 服务调用失败时，返回一个默认值
+@Slf4j
+public class ItemClientFallbackFactory implements FallbackFactory<ItemClient> {
+    @Override
+    public ItemClient create(Throwable cause) {
+        return new ItemClient() {
+            @Override
+            public List<ItemDTO> queryItemByIds(Collection<Long> ids) {
+                log.error("查询商品失败！", cause);
+                return CollUtils.emptyList();
+            }
+
+            @Override
+            public void deductStock(List<OrderDetailDTO> items) {
+                log.error("扣减商品库存失败！", cause);
+                throw new RuntimeException(cause);
+            }
+
+            @Override
+            public void restoreStock(List<OrderDetailDTO> items) {
+                log.error("恢复商品库存失败！", cause);
+                throw new RuntimeException(cause);
+            }
+        };
+    }
+}
