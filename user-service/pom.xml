@@ -67,6 +67,11 @@
             <artifactId>sm-api</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <!--okHttp：Feign 使用连接池-->
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-okhttp</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <finalName>${project.artifactId}</finalName>

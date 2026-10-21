@@ -1,7 +1,10 @@
 package com.small.api.config;
 
+import com.small.api.client.fallback.CartClientFallbackFactory;
 import com.small.api.client.fallback.ItemClientFallbackFactory;
 import com.small.api.client.fallback.PayClientFallback;
+import com.small.api.client.fallback.TradeClientFallbackFactory;
+import com.small.api.client.fallback.UserClientFallbackFactory;
 import com.small.common.utils.UserContext;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
@@ -35,5 +38,20 @@ public class DefaultFeignConfig {
     @Bean
     public PayClientFallback payClientFallback() {
         return new PayClientFallback();
+    }
+
+    @Bean
+    public CartClientFallbackFactory cartClientFallbackFactory() {
+        return new CartClientFallbackFactory();
+    }
+
+    @Bean
+    public TradeClientFallbackFactory tradeClientFallbackFactory() {
+        return new TradeClientFallbackFactory();
+    }
+
+    @Bean
+    public UserClientFallbackFactory userClientFallbackFactory() {
+        return new UserClientFallbackFactory();
     }
 }
