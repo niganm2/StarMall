@@ -11,6 +11,7 @@ import com.small.trade.constants.MQConstants;
 import com.small.trade.domain.dto.OrderFormDTO;
 import com.small.trade.domain.po.Order;
 import com.small.trade.domain.po.OrderDetail;
+import com.small.trade.limit.OrderRateLimiter;
 import com.small.trade.mapper.OrderMapper;
 import com.small.trade.service.IOrderDetailService;
 import com.small.trade.service.IOrderService;
@@ -46,10 +47,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private final IOrderDetailService detailService;
     private final CartClient cartClient;
     private final RabbitTemplate rabbitTemplate;
+    private final OrderRateLimiter orderRateLimiter;
 
     @Override
     @GlobalTransactional  // 开启全局事务XA模式
     public Long createOrder(OrderFormDTO orderFormDTO) {
+        // 0.按用户维度做滑动窗口频控，防止脚本刷单与重复提交
+        orderRateLimiter.check(UserContext.getUser());
+
         // 1.订单数据
         Order order = new Order();
         // 1.1.查询商品

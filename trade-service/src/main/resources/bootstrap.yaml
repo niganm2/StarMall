@@ -18,4 +18,5 @@ spring:
           - data-id: shared-mq.yaml
           - data-id: shared-feign.yaml
           - data-id: shared-sentinel.yaml
+          - data-id: shared-redis.yaml
           - data-id: trade-service.yaml
