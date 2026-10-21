@@ -1,6 +1,7 @@
 package com.small.ai.config;
 
 import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
+import com.small.ai.rag.ProductRagTools;
 import com.small.ai.tools.CartTools;
 import com.small.ai.tools.OrderTools;
 import com.small.ai.tools.ShoppingTools;
@@ -29,11 +30,12 @@ public class AiChatConfig {
     private static final Resource CART_PROMPT = new ClassPathResource("prompts/cart.st");
     private static final Resource SUPPORT_PROMPT = new ClassPathResource("prompts/support.st");
 
-    /** 导购场景：强创造力的推荐模型 + 商品工具 + 购物车工具（导购要承接"选好了→加入购物车"的漏斗） */
+    /** 导购场景：强创造力的推荐模型 + 商品工具 + 语义检索工具 + 购物车工具（导购要承接"选好了→加入购物车"的漏斗） */
     @Bean
     public ChatClient shoppingChatClient(ChatClient.Builder builder,
                                          ChatMemoryRepository chatMemoryRepository,
                                          ShoppingTools shoppingTools,
+                                         ProductRagTools productRagTools,
                                          CartTools cartTools) {
         return builder
                 .defaultSystem(SHOPPING_PROMPT)
@@ -42,7 +44,7 @@ public class AiChatConfig {
                         .withModel("qwen-plus")
                         .withTemperature(0.8)
                         .build())
-                .defaultTools(shoppingTools, cartTools)
+                .defaultTools(shoppingTools, productRagTools, cartTools)
                 .build();
     }
 

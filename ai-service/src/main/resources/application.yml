@@ -16,6 +16,10 @@ spring:
       chat:
         options:
           model: qwen-plus
+      # 向量化模型：与通义千问共用同一 API Key，默认输出 1024 维向量
+      embedding:
+        options:
+          model: text-embedding-v3
     chat:
       memory:
         repository:
