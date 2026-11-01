@@ -50,7 +50,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private final OrderRateLimiter orderRateLimiter;
 
     @Override
-    @GlobalTransactional  // 开启全局事务XA模式
+    @GlobalTransactional  // 开启全局事务（Seata AT 模式：一阶段本地提交，二阶段基于 undo_log 回滚）
     public Long createOrder(OrderFormDTO orderFormDTO) {
         // 0.按用户维度做滑动窗口频控，防止脚本刷单与重复提交
         orderRateLimiter.check(UserContext.getUser());

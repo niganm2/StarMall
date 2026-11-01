@@ -22,7 +22,7 @@ public class OrderDelayMessageListener {
     private final PayClient payClient;
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(name = MQConstants.DELAY_ORDER_QUEUE_NAME),
-            exchange = @Exchange(name = MQConstants.DELAY_EXCHANGE_NAME, type = ExchangeTypes.DIRECT),
+            exchange = @Exchange(name = MQConstants.DELAY_EXCHANGE_NAME, type = ExchangeTypes.DIRECT, delayed = "true"),
             key = MQConstants.DELAY_ORDER_KEY
     ))
     public void listenOrderDelayMessage(Long orderId) {

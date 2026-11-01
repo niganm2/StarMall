@@ -29,5 +29,8 @@ logs/
 ### VS Code ###
 .vscode/
 
+### 压测脚本（含本地测试账号与密码），不上传 ###
+scripts/loadtest/
+
 ### Mac OS ###
 .DS_Store
