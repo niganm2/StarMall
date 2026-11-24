@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+  <title>星购商城 StarMall - 我的订单</title>
+
+  <link rel="stylesheet" type="text/css" href="css/webbase.css" />
+  <link rel="stylesheet" type="text/css" href="css/top-bar.css?v=20261204" />
+  <style>
+    body { background: #F5F5F5; }
+    .orders-page { width: 990px; max-width: calc(100% - 40px); margin: 18px auto 40px; }
+    .orders-title { font-size: 18px; color: #333; margin: 0 0 14px; font-weight: 600; }
+    .orders-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .orders-tabs a {
+      display: inline-block; padding: 5px 14px; font-size: 13px; line-height: 20px;
+      color: #333; background: #FFF; border-radius: 5px; text-decoration: none;
+      outline: none; transition: background-color .2s, color .2s;
+    }
+    .orders-tabs a:hover, .orders-tabs a.active { background: #2B59C3; color: #FFF; }
+    .orders-tabs a .tab-badge {
+      display: inline-block; min-width: 15px; height: 15px; margin-left: 4px;
+      padding: 0 4px; font-size: 11px; font-style: normal; line-height: 15px;
+      text-align: center; color: #FFF; background: #E1251B; border-radius: 8px;
+      box-sizing: border-box; vertical-align: 1px;
+    }
+    .order-card { background: #FFF; border-radius: 6px; margin-bottom: 14px; overflow: hidden; }
+    .order-card-head {
+      display: flex; align-items: center; padding: 10px 16px; font-size: 12px;
+      color: #666; background: #FAFAFA; border-bottom: 1px solid #EEE;
+    }
+    .order-card-head .order-time { margin-right: 20px; }
+    .order-card-head .order-no { margin-right: auto; }
+    .order-card-head .order-status { font-weight: 600; }
+    .order-card-head .s1 { color: #E1251B; }
+    .order-card-head .s2, .order-card-head .s3 { color: #2B59C3; }
+    .order-card-head .s5 { color: #999; }
+    .order-good {
+      display: flex; align-items: center; padding: 12px 16px;
+      border-bottom: 1px dashed #EEE;
+    }
+    .order-good:last-child { border-bottom: none; }
+    .order-good img { width: 70px; height: 70px; object-fit: contain; border: 1px solid #F0F0F0; }
+    .order-good-info { flex: 1; margin-left: 12px; }
+    .order-good-name { font-size: 13px; color: #333; margin: 0 0 6px; line-height: 18px; }
+    .order-good-spec { font-size: 12px; color: #999; margin: 0; }
+    .order-good-price { width: 110px; text-align: right; font-size: 13px; color: #333; }
+    .order-card-foot {
+      display: flex; align-items: center; justify-content: flex-end;
+      padding: 10px 16px; font-size: 13px; color: #333;
+    }
+    .order-card-foot .order-total { margin-right: 16px; }
+    .order-card-foot .order-total b { color: #E1251B; font-size: 16px; }
+    .order-btn {
+      display: inline-block; margin-left: 8px; padding: 5px 14px;
+      font-size: 12px; line-height: 18px; border-radius: 4px;
+      text-decoration: none; cursor: pointer; outline: none;
+    }
+    .order-btn-primary { color: #FFF; background: #2B59C3; }
+    .order-btn-primary:hover { background: #2248A3; color: #FFF; }
+    .order-btn-plain { color: #666; background: #FFF; border: 1px solid #DDD; }
+    .order-btn-plain:hover { color: #E1251B; border-color: #E1251B; }
+    .orders-empty { padding: 60px 0; text-align: center; font-size: 14px; color: #999; background: #FFF; border-radius: 6px; }
+    .orders-pager { margin-top: 16px; text-align: center; font-size: 13px; color: #666; }
+    .orders-pager a {
+      display: inline-block; margin: 0 12px; padding: 4px 12px; color: #2B59C3;
+      background: #FFF; border-radius: 4px; text-decoration: none;
+    }
+    .orders-pager a.disabled { color: #BBB; cursor: not-allowed; }
+    .refund-mask {
+      position: fixed; inset: 0; z-index: 999; display: flex;
+      align-items: center; justify-content: center; background: rgba(0, 0, 0, .45);
+    }
+    .refund-dialog {
+      width: 420px; max-width: calc(100% - 40px); background: #FFF;
+      border-radius: 8px; overflow: hidden; box-shadow: 0 8px 30px rgba(0, 0, 0, .2);
+    }
+    .refund-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px; font-size: 16px; color: #333; border-bottom: 1px solid #EEE;
+    }
+    .refund-close { font-style: normal; font-size: 20px; line-height: 1; color: #999; cursor: pointer; }
+    .refund-close:hover { color: #E1251B; }
+    .refund-body { padding: 18px; }
+    .refund-row { display: flex; align-items: center; margin-bottom: 14px; font-size: 14px; color: #333; }
+    .refund-row:last-child { margin-bottom: 0; }
+    .refund-row label { width: 80px; color: #666; }
+    .refund-amount { font-size: 20px; font-weight: 600; color: #E1251B; }
+    .refund-row select {
+      flex: 1; height: 34px; padding: 0 8px; font-size: 13px; color: #333;
+      background: #FFF; border: 1px solid #DDD; border-radius: 4px; outline: none;
+    }
+    .refund-row select:focus { border-color: #2B59C3; }
+    .refund-foot {
+      display: flex; justify-content: flex-end; padding: 12px 18px;
+      background: #FAFAFA; border-top: 1px solid #EEE;
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="ordersApp">
+  <top></top>
+
+  <div class="orders-page">
+    <h2 class="orders-title">我的订单</h2>
+
+    <div class="orders-tabs">
+      <a v-for="t in tabs" :key="t.value" href="javascript:void(0)"
+         :class="{active: status === t.value}" @click="changeStatus(t.value)">{{t.label}}<i class="tab-badge" v-if="t.badge">{{t.badge}}</i></a>
+    </div>
+
+    <div v-if="!loading && orders.length === 0" class="orders-empty">暂无相关订单</div>
+
+    <div class="order-card" v-for="o in orders" :key="o.id">
+      <div class="order-card-head">
+        <span class="order-time">{{fmtTime(o.createTime)}}</span>
+        <span class="order-no">订单号：{{o.id}}</span>
+        <span class="order-status" :class="'s' + o.status">{{statusText(o.status)}}</span>
+      </div>
+
+      <div class="order-good" v-for="d in o.details" :key="d.id">
+        <img :src="d.image" :alt="d.name">
+        <div class="order-good-info">
+          <p class="order-good-name">{{d.name}}</p>
+          <p class="order-good-spec" v-if="d.spec">{{d.spec}}</p>
+        </div>
+        <span class="order-good-price">¥{{(d.price / 100).toFixed(2)}} × {{d.num}}</span>
+      </div>
+
+      <div class="order-card-foot">
+        <span class="order-total">实付：<b>¥{{(o.totalFee / 100).toFixed(2)}}</b></span>
+        <a v-if="o.status === 1" class="order-btn order-btn-primary" :href="'/pay.html?id=' + o.id">去支付</a>
+        <a v-if="o.status === 2 || o.status === 3" class="order-btn order-btn-plain" href="javascript:void(0)" @click="openRefund(o)">申请退款</a>
+        <a v-if="o.status === 2" class="order-btn order-btn-primary" href="javascript:void(0)" @click="ship(o)">模拟发货</a>
+        <a v-if="o.status === 1" class="order-btn order-btn-plain" href="javascript:void(0)" @click="cancel(o)">取消订单</a>
+        <a v-if="o.status === 5" class="order-btn order-btn-plain" href="javascript:void(0)" @click="remove(o)">删除订单</a>
+      </div>
+    </div>
+
+    <div class="orders-pager" v-if="pages > 1">
+      <a href="javascript:void(0)" :class="{disabled: pageNo <= 1}" @click="prev">上一页</a>
+      <span>{{pageNo}} / {{pages}}</span>
+      <a href="javascript:void(0)" :class="{disabled: pageNo >= pages}" @click="next">下一页</a>
+    </div>
+  </div>
+
+  <!-- 申请退款弹窗 -->
+  <div class="refund-mask" v-if="refundTarget" @click.self="closeRefund">
+    <div class="refund-dialog">
+      <div class="refund-head">
+        <span>申请退款</span>
+        <i class="refund-close" @click="closeRefund">×</i>
+      </div>
+      <div class="refund-body">
+        <div class="refund-row">
+          <label>退款金额</label>
+          <span class="refund-amount">¥{{refundAmount}}</span>
+        </div>
+        <div class="refund-row">
+          <label>退款原因</label>
+          <select v-model="refundReason">
+            <option value="">请选择退款原因</option>
+            <option v-for="r in refundReasons" :key="r" :value="r">{{r}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="refund-foot">
+        <a class="order-btn order-btn-plain" href="javascript:void(0)" @click="closeRefund">取消</a>
+        <a class="order-btn order-btn-primary" href="javascript:void(0)" @click="submitRefund">确认退款</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="./js/vue.js"></script>
+<script src="./js/axios.min.js"></script>
+<script src="./js/common.js"></script>
+<script src="./js/top.js?v=20261206"></script>
+<script>
+  new Vue({
+    el: "#ordersApp",
+    data: {
+      status: null,
+      orders: [],
+      pageNo: 1,
+      pageSize: 5,
+      pages: 0,
+      total: 0,
+      loading: true,
+      waitPayCount: 0,
+      waitReceiveCount: 0,
+      refundTarget: null,
+      refundReason: '',
+      refundReasons: [
+        '不想要了 / 拍错了',
+        '商品质量问题',
+        '商品与描述不符',
+        '商品破损、缺件或少件',
+        '发货太慢',
+        '价格问题（降价/多拍）',
+        '商家未按约定时间发货',
+        '其他原因'
+      ],
+      util
+    },
+    computed: {
+      tabs() {
+        return [
+          {label: '全部', value: null},
+          {label: '待付款', value: 1, badge: this.waitPayCount},
+          {label: '待发货', value: 2},
+          {label: '待收货', value: 3, badge: this.waitReceiveCount},
+          {label: '退款成功', value: 7},
+          {label: '交易取消', value: 5}
+        ]
+      },
+      refundAmount() {
+        return this.refundTarget ? (this.refundTarget.totalFee / 100).toFixed(2) : '0.00'
+      }
+    },
+    mounted() {
+      if (!sessionStorage.getItem("token")) {
+        window.location.href = "/login.html";
+        return;
+      }
+      this.load();
+    },
+    methods: {
+      load() {
+        this.loading = true;
+        axios.get("/orders", {
+          params: {pageNo: this.pageNo, pageSize: this.pageSize, status: this.status}
+        }).then(res => {
+          this.orders = res.list || [];
+          this.pages = res.pages || 0;
+          this.total = res.total || 0;
+        }).catch(() => {
+          this.orders = [];
+          this.pages = 0;
+        }).finally(() => this.loading = false);
+        this.loadCounts();
+      },
+      loadCounts() {
+        // 复用列表接口的 total 统计各状态数量
+        axios.get("/orders", {params: {pageNo: 1, pageSize: 1, status: 1}})
+          .then(res => this.waitPayCount = parseInt(res.total, 10) || 0)
+          .catch(() => this.waitPayCount = 0)
+        axios.get("/orders", {params: {pageNo: 1, pageSize: 1, status: 3}})
+          .then(res => this.waitReceiveCount = parseInt(res.total, 10) || 0)
+          .catch(() => this.waitReceiveCount = 0)
+      },
+      changeStatus(v) {
+        this.status = v;
+        this.pageNo = 1;
+        this.load();
+      },
+      prev() {
+        if (this.pageNo <= 1) return;
+        this.pageNo--;
+        this.load();
+      },
+      next() {
+        if (this.pageNo >= this.pages) return;
+        this.pageNo++;
+        this.load();
+      },
+      cancel(o) {
+        if (!confirm("确定取消该订单吗？")) return;
+        axios.put("/orders/" + o.id + "/cancel")
+          .then(() => this.load())
+          .catch(err => alert((err.response && err.response.data && err.response.data.msg) || "取消失败，请重试！"));
+      },
+      ship(o) {
+        if (!confirm("确认对该订单执行模拟发货吗？")) return;
+        axios.put("/orders/" + o.id + "/ship")
+          .then(() => this.load())
+          .catch(err => alert((err.response && err.response.data && err.response.data.msg) || "发货失败，请重试！"));
+      },
+      openRefund(o) {
+        this.refundTarget = o;
+        this.refundReason = '';
+      },
+      closeRefund() {
+        this.refundTarget = null;
+      },
+      submitRefund() {
+        if (!this.refundReason) {
+          alert("请选择退款原因");
+          return;
+        }
+        const id = this.refundTarget.id;
+        // 退款要串行走支付服务、用户服务、商品服务，耗时可能超过全局 2s 超时，这里单独放宽
+        axios.post("/orders/" + id + "/refund", null, {params: {reason: this.refundReason}, timeout: 20000})
+          .then(() => {
+            alert("退款成功，款项已退回账户余额");
+            this.closeRefund();
+            this.load();
+          })
+          .catch(err => {
+            if (err.code === "ECONNABORTED") {
+              alert("请求超时，退款可能已成功，请刷新订单列表确认");
+              this.closeRefund();
+              this.load();
+            } else {
+              alert((err.response && err.response.data && err.response.data.msg) || "退款失败，请重试！");
+            }
+          });
+      },
+      remove(o) {
+        if (!confirm("确定删除该订单吗？")) return;
+        axios.delete("/orders/" + o.id)
+          .then(() => this.load())
+          .catch(err => alert((err.response && err.response.data && err.response.data.msg) || "删除失败，请重试！"));
+      },
+      statusText(s) {
+        const map = {1: '未付款', 2: '已付款，待发货', 3: '已发货', 4: '已收货', 5: '交易取消', 6: '交易完成', 7: '退款成功'};
+        return map[s] || '未知状态';
+      },
+      fmtTime(t) {
+        return t ? String(t).replace('T', ' ').substring(0, 19) : '';
+      }
+    }
+  });
+</script>
+</body>
+</html>

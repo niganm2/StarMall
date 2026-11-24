@@ -9,6 +9,7 @@ public enum PayStatus {
     TRADE_CLOSED(2, "已关闭"),
     TRADE_SUCCESS(3, "支付成功"),
     TRADE_FINISHED(3, "支付成功"),
+    REFUNDED(4, "已退款"),
     ;
     private final int value;
     private final String desc;

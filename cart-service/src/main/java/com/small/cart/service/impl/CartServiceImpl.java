@@ -43,23 +43,83 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements IC
     public void addItem2Cart(CartFormDTO cartFormDTO) {
         // 1.获取登录用户
         Long userId = UserContext.getUser();
+        // 2.查询商品：商品名称、价格、图片一律以后端为准，避免前端篡改
+        List<ItemDTO> items = itemClient.queryItemByIds(Collections.singletonList(cartFormDTO.getItemId()));
+        if (CollUtils.isEmpty(items)) {
+            throw new BizIllegalException("商品不存在");
+        }
+        ItemDTO item = items.get(0);
 
-        // 2.判断是否已经存在
-        if (checkItemExists(cartFormDTO.getItemId(), userId)) {
-            // 2.1.存在，则更新数量
-            baseMapper.updateNum(cartFormDTO.getItemId(), userId);
+        // 3.判断是否已经存在
+        Cart existing = lambdaQuery()
+                .eq(Cart::getUserId, userId)
+                .eq(Cart::getItemId, item.getId())
+                .one();
+        if (existing != null) {
+            // 3.1.存在，则数量+1，且不能超过库存
+            int newNum = existing.getNum() + 1;
+            checkStock(item, newNum);
+            lambdaUpdate().set(Cart::getNum, newNum).eq(Cart::getId, existing.getId()).update();
             return;
         }
-        // 2.2.不存在，判断是否超过购物车数量
+        // 3.2.不存在，判断购物车容量和库存
         checkCartsFull(userId);
+        checkStock(item, 1);
 
-        // 3.新增购物车条目
-        // 3.1.转换PO
-        Cart cart = BeanUtils.copyBean(cartFormDTO, Cart.class);
-        // 3.2.保存当前用户
+        // 4.新增购物车条目（商品信息取自商品服务）
+        Cart cart = new Cart();
         cart.setUserId(userId);
-        // 3.3.保存到数据库
+        cart.setItemId(item.getId());
+        cart.setName(item.getName());
+        cart.setSpec(cartFormDTO.getSpec());
+        cart.setPrice(item.getPrice());
+        cart.setImage(item.getImage());
+        cart.setNum(1);
         save(cart);
+    }
+
+    @Override
+    public void updateCart(Cart cart) {
+        // 1.查询购物车条目并校验归属
+        Cart db = getById(cart.getId());
+        if (db == null) {
+            throw new BizIllegalException("购物车条目不存在");
+        }
+        if (!db.getUserId().equals(UserContext.getUser())) {
+            throw new BizIllegalException("无权操作该购物车");
+        }
+        // 2.校验数量
+        Integer num = cart.getNum();
+        if (num == null || num < 1) {
+            throw new BizIllegalException("商品数量必须大于0");
+        }
+        // 3.校验库存
+        List<ItemDTO> items = itemClient.queryItemByIds(Collections.singletonList(db.getItemId()));
+        if (CollUtils.isEmpty(items)) {
+            throw new BizIllegalException("商品不存在");
+        }
+        checkStock(items.get(0), num);
+        // 4.只允许修改数量
+        lambdaUpdate().set(Cart::getNum, num).eq(Cart::getId, db.getId()).update();
+    }
+
+    @Override
+    public void removeMyCartItem(Long id) {
+        boolean removed = remove(new QueryWrapper<Cart>().lambda()
+                .eq(Cart::getId, id)
+                .eq(Cart::getUserId, UserContext.getUser()));
+        if (!removed) {
+            throw new BizIllegalException("购物车条目不存在");
+        }
+    }
+
+    private void checkStock(ItemDTO item, int num) {
+        if (item.getStatus() != null && item.getStatus() != 1) {
+            throw new BizIllegalException("商品已下架");
+        }
+        if (item.getStock() != null && num > item.getStock()) {
+            throw new BizIllegalException("商品库存不足，最多可购买" + item.getStock() + "件");
+        }
     }
 
     @Override
@@ -120,13 +180,5 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements IC
         if (count >= cartProperties.getMaxItems()) {
             throw new BizIllegalException(StrUtil.format("用户购物车商品不能超过{}", cartProperties.getMaxItems()));
         }
-    }
-
-    private boolean checkItemExists(Long itemId, Long userId) {
-        Long count = lambdaQuery()
-                .eq(Cart::getUserId, userId)
-                .eq(Cart::getItemId, itemId)
-                .count();
-        return count > 0;
     }
 }

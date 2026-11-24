@@ -32,5 +32,18 @@ logs/
 ### 压测脚本（含本地测试账号与密码），不上传 ###
 scripts/loadtest/
 
+### 本地密钥（OSS AccessKey 等），不上传 ###
+.secrets/
+
 ### Mac OS ###
 .DS_Store
+
+### 测试脚本与测试产物，不上传 ###
+测试脚本/
+测试报告-*.md
+_order_test_result.json
+docs/seckill/
+**/src/test/
+
+### Trae 分享包（工具产物），不上传 ###
+.trae-html-share-packages/

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.small.api.client.TradeClient;
 import com.small.api.client.UserClient;
+import com.small.common.exception.BadRequestException;
 import com.small.common.exception.BizIllegalException;
 import com.small.common.utils.BeanUtils;
 import com.small.common.utils.UserContext;
@@ -14,6 +15,7 @@ import com.small.pay.domain.po.PayOrder;
 import com.small.pay.enums.PayStatus;
 import com.small.pay.mapper.PayOrderMapper;
 import com.small.pay.service.IPayOrderService;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.AmqpException;
@@ -57,15 +59,27 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> i
         PayOrder po = getById(payOrderFormDTO.getId());
         // 2.判断状态
         if (!PayStatus.WAIT_BUYER_PAY.equalsValue(po.getStatus())) {
-            // 订单不是未支付，状态异常
-            throw new BizIllegalException("交易已支付或关闭！");
+            // 订单不是未支付，状态异常：属于客户端业务错误，返回 400 而非 500
+            throw new BadRequestException("交易已支付或关闭！");
         }
-        // 3.尝试扣减余额
-        userClient.deductMoney(payOrderFormDTO.getPw(), po.getAmount());
+        // 3.尝试扣减余额（密码错误、余额不足要给出明确提示）
+        try {
+            userClient.deductMoney(payOrderFormDTO.getPw(), po.getAmount());
+        } catch (Throwable e) {
+            // Sentinel 会把 Feign 降级抛出的异常包装成 AssertionError，这里按消息内容还原业务提示
+            String msg = String.valueOf(e.getMessage());
+            if (msg.contains("支付密码错误")) {
+                throw new BadRequestException("支付密码错误，请重新输入");
+            }
+            if (msg.contains("余额不足")) {
+                throw new BadRequestException("余额不足，请更换支付方式");
+            }
+            throw new BadRequestException("暂时无法完成支付，请稍后重试");
+        }
         // 4.修改支付单状态
         boolean success = markPayOrderSuccess(payOrderFormDTO.getId(), LocalDateTime.now());
         if (!success) {
-            throw new BizIllegalException("交易已支付或关闭！");
+            throw new BadRequestException("交易已支付或关闭！");
         }
         //5.修改订单状态
 //        tradeClient.markOrderPaySuccess(po.getBizOrderNo());
@@ -73,6 +87,32 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> i
             rabbitTemplate.convertAndSend("pay.direct", "pay.success", po.getBizOrderNo());
         } catch (AmqpException e) {
             log.error("发送支付成功消息失败,订单id：{}", po.getBizOrderNo(), e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void refundPayOrder(Long bizOrderNo) {
+        // 1.查询支付单
+        PayOrder po = queryByBizOrderNo(bizOrderNo);
+        if (po == null) {
+            throw new BizIllegalException("支付单不存在，无法退款");
+        }
+        // 2.只有支付成功的支付单才能退款
+        if (!PayStatus.TRADE_SUCCESS.equalsValue(po.getStatus())) {
+            throw new BizIllegalException("当前支付单状态不支持退款");
+        }
+        // 3.原路退回：余额支付退回用户余额
+        userClient.refundMoney(po.getAmount());
+        // 4.更新支付单状态为已退款（带状态乐观锁）
+        boolean success = lambdaUpdate()
+                .set(PayOrder::getStatus, PayStatus.REFUNDED.getValue())
+                .set(PayOrder::getUpdateTime, LocalDateTime.now())
+                .eq(PayOrder::getId, po.getId())
+                .eq(PayOrder::getStatus, PayStatus.TRADE_SUCCESS.getValue())
+                .update();
+        if (!success) {
+            throw new BizIllegalException("退款失败，支付单状态已变更");
         }
     }
 

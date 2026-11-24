@@ -7,7 +7,6 @@ import com.small.common.utils.BeanUtils;
 import com.small.pay.domain.dto.PayApplyDTO;
 import com.small.pay.domain.dto.PayOrderFormDTO;
 import com.small.pay.domain.po.PayOrder;
-import com.small.pay.domain.vo.PayOrderVO;
 import com.small.pay.enums.PayType;
 import com.small.pay.service.IPayOrderService;
 import io.swagger.annotations.Api;
@@ -16,8 +15,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Api(tags = "支付相关接口")
 @RestController
 @RequestMapping("/pay-orders")
@@ -25,12 +22,6 @@ import java.util.List;
 public class PayController {
 
     private final IPayOrderService payOrderService;
-
-    @ApiOperation("查询支付单")
-    @GetMapping
-    public List<PayOrderVO> queryPayOrders(){
-        return BeanUtils.copyList(payOrderService.list(), PayOrderVO.class);
-    }
 
     @ApiOperation("生成支付订单")
     @PostMapping
@@ -55,5 +46,12 @@ public class PayController {
     public PayOrderDTO queryPayOrderByBizOrderNo(@PathVariable("id") Long id){
         PayOrder payOrder = payOrderService.lambdaQuery().eq(PayOrder::getBizOrderNo, id).one();
         return BeanUtils.copyBean(payOrder, PayOrderDTO.class);
+    }
+
+    @ApiOperation("退款（余额支付原路退回用户余额）")
+    @ApiImplicitParam(value = "业务订单id", name = "id")
+    @PutMapping("/biz/{id}/refund")
+    public void refundPayOrder(@PathVariable("id") Long bizOrderNo){
+        payOrderService.refundPayOrder(bizOrderNo);
     }
 }

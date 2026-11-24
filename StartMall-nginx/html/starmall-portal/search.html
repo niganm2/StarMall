@@ -1,12 +1,13 @@
-<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <title>星购商城 StarMall - 搜索</title>
   <link rel="stylesheet" type="text/css" href="./css/webbase.css" />
-  <link rel="stylesheet" href="./css/index.css"/>
+  <link rel="stylesheet" href="./css/index.css?v=20261124"/>
   <link rel="stylesheet" href="./css/banner.css"/>
+  <link rel="stylesheet" href="./css/top-bar.css?v=20261204"/>
 </head>
 
 <body>
@@ -113,7 +114,7 @@
           <span class="item-gray">最近1个月销量 :</span> <span class="item-sold" v-text="comment(item.sold)"></span>
         </div>
         <div class="buy-btn-box">
-          <div class="buy-btn" @click="toOrderConfirm(item.id)">
+          <div class="buy-btn" @click="toOrderConfirm(item)">
             <span >立刻购买</span>
           </div>
           <div class="buy-btn" @click="add2Cart(item)">
@@ -128,14 +129,14 @@
 <script src="./js/vue.js"></script>
 <script src="./js/axios.min.js"></script>
 <script src="js/common.js"></script>
-<script src="js/top.js"></script>
+<script src="js/top.js?v=20261206"></script>
 
 <script>
 
   let app = new Vue({
     el: "#app",
     data: {
-      isTest: true,
+      isTest: false,
       filterNames: {
         category: "分类",
         brand: "品牌",
@@ -208,7 +209,7 @@
       util.store.set("return-url", location.href);
       this.user = util.store.get("user-info")
       let key = util.getUrlParam("key");
-      if(key !== "null"){
+      if (key && key !== "null") {
         this.params.key = key
       }
       // 页面加载时，先搜索一下
@@ -354,25 +355,45 @@
           return Math.floor(count / 10000) + "万+";
         }
       },
-      toOrderConfirm(id) {
-        location.href = "/order-confirm.html?id=" + id
-      },
-      add2Cart(item) {
-        let { id, ... param} = item;
-        param.itemId = id;
-        param.num = 1;
+      toOrderConfirm(item) {
         if(!util.isLogin()){
           // 未登录，跳转去登录页
           location.href = "/login.html"
+          return
         }
+        // 立即购买：把当前商品作为待结算项传给确认订单页
+        util.store.set("selectedCarts", [{
+          id: item.id,
+          itemId: item.id,
+          name: item.name,
+          price: item.price,
+          num: 1,
+          stock: item.stock,
+          image: item.image,
+          spec: item.spec,
+          status: item.status
+        }])
+        location.href = "/order-confirm.html"
+      },
+      add2Cart(item) {
+        if(!util.isLogin()){
+          // 未登录，跳转去登录页，不再继续发请求
+          location.href = "/login.html"
+          return
+        }
+        let { id, ... param} = item;
+        param.itemId = id;
+        param.num = 1;
         // 已登录
         axios.post("/carts", param)
           .then(resp => {
             location.href = "/cart.html"
           })
           .catch(err => {
-            console.log(err.response.data);
-            alert(err.response.data.msg || "添加购物车失败")
+            if (err.response && err.response.status === 401) {
+              return
+            }
+            alert((err.response && err.response.data && err.response.data.msg) || "添加购物车失败")
           })
 
       }

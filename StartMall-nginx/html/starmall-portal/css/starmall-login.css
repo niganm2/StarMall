@@ -103,3 +103,439 @@ body {
 .copyright p {
   margin: 4px 0;
 }
+
+/* ---- 8. 顶部 Logo 尺寸：150 x 55，上下外边距 5px ---- */
+#loginApp .logoArea .banner .logo img {
+  width: 150px;
+  height: 55px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+/* ---- 9. 登录页不显示顶部导航栏 ---- */
+#loginApp .top {
+  display: none;
+}
+
+/* ================= 10. 京东风格登录页 ================= */
+#loginApp.login-box {
+  width: auto !important;
+  min-height: 100vh;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #f4f4f4 !important;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* --- 顶部 Logo 条 --- */
+.jd-header {
+  background: #ffffff;
+  border-bottom: 1px solid #ededed;
+}
+.jd-header-inner {
+  width: 760px;
+  max-width: calc(100% - 40px);
+  margin: 0 auto;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.jd-logo {
+  height: 55px;
+  display: block;
+  margin: 0 !important;
+  padding: 0;
+}
+.jd-header-tip {
+  margin-left: auto;
+  color: #999999;
+  font-size: 14px;
+}
+
+/* --- 主区域：卡片垂直水平居中 --- */
+.jd-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+/* --- 白色卡片 --- */
+.jd-card {
+  width: 760px;
+  max-width: calc(100% - 40px);
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  display: flex;
+  padding: 50px 0;
+  box-sizing: border-box;
+}
+
+/* --- 左侧扫码区 --- */
+.jd-qr-area {
+  width: 50%;
+  padding: 0 45px;
+  box-sizing: border-box;
+  text-align: center;
+  border-right: 1px solid #f0f0f0;
+}
+.jd-qr-title {
+  margin: 0 0 12px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #333333;
+}
+.jd-qr-sub {
+  margin: 0 0 22px;
+  font-size: 13px;
+  color: #999999;
+}
+.jd-qr-sub b {
+  color: #2B59C3;
+  font-weight: 600;
+}
+.jd-qr-box {
+  width: 170px;
+  height: 170px;
+  margin: 0 auto;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #eeeeee;
+  border-radius: 6px;
+}
+.jd-qr-box img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.jd-qr-tip {
+  margin: 18px 0 0;
+  font-size: 13px;
+  color: #999999;
+}
+
+/* --- 右侧表单区 --- */
+.jd-form-area {
+  width: 50%;
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+/* 标签切换 */
+.jd-tabs {
+  display: flex;
+  align-items: center;
+  margin-bottom: 26px;
+}
+.jd-tabs a {
+  font-size: 18px;
+  color: #333333;
+  text-decoration: none;
+  margin-right: 24px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid transparent;
+  outline: none;
+}
+.jd-tabs a:focus,
+.jd-tabs a:active {
+  outline: none;
+  box-shadow: none;
+}
+.jd-tabs a:hover {
+  color: #2B59C3;
+}
+.jd-tabs a.active {
+  color: #2B59C3;
+  font-weight: 700;
+  border-bottom-color: #2B59C3;
+}
+
+/* 输入框 */
+.jd-field {
+  margin-bottom: 16px;
+}
+.jd-field input {
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  padding: 0 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: #333333;
+  background: #f5f5f5;
+  border: 1px solid #f5f5f5;
+  border-radius: 6px;
+  outline: none;
+}
+.jd-field input:focus {
+  background: #ffffff;
+  border-color: #2B59C3;
+}
+.jd-field-code {
+  position: relative;
+}
+.jd-field-code input {
+  padding-right: 100px;
+}
+.jd-getcode {
+  position: absolute;
+  right: 14px;
+  top: 15px;
+  font-size: 13px;
+  color: #2B59C3;
+  text-decoration: none;
+}
+
+/* 错误提示 */
+.jd-msg {
+  min-height: 18px;
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #e1251b;
+}
+
+/* 登录按钮 */
+.jd-btn-login {
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  padding: 0;
+  font-size: 17px;
+  letter-spacing: 2px;
+  color: #ffffff;
+  background: linear-gradient(180deg, #3572E6 0%, #2B59C3 100%);
+  background-color: #2B59C3;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.jd-btn-login:hover {
+  background: #2248a3;
+  background-color: #2248a3;
+}
+.jd-btn-login:focus,
+.jd-btn-login:active {
+  outline: none;
+  box-shadow: none;
+}
+
+/* 第三方登录与辅助链接 */
+.jd-links {
+  margin-top: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #999999;
+}
+.jd-third {
+  display: flex;
+  align-items: center;
+}
+.jd-third img {
+  width: 18px;
+  height: 18px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.jd-third i {
+  width: 1px;
+  height: 12px;
+  margin: 0 10px;
+  background: #dddddd;
+  display: inline-block;
+}
+.jd-link-group a {
+  margin-left: 14px;
+  color: #999999;
+  text-decoration: none;
+  outline: none;
+}
+.jd-link-group a:focus,
+.jd-link-group a:active {
+  outline: none;
+  box-shadow: none;
+}
+.jd-link-group a:hover {
+  color: #2B59C3;
+}
+
+/* --- 底部版权 --- */
+.jd-footer {
+  padding: 30px 0 40px;
+  color: #999999;
+  text-align: center;
+  line-height: 24px;
+  font-size: 13px;
+}
+.jd-footer ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px;
+  display: flex;
+  justify-content: center;
+}
+.jd-footer ul li {
+  margin: 0 12px;
+}
+.jd-footer p {
+  margin: 4px 0;
+}
+
+/* --- 注册页：图形验证码 --- */
+.jd-field-captcha {
+  display: flex;
+  align-items: center;
+}
+.jd-field-captcha input {
+  flex: 1;
+  min-width: 0;
+}
+.jd-field-captcha canvas {
+  flex-shrink: 0;
+  margin-left: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.jd-captcha-refresh {
+  flex-shrink: 0;
+  margin-left: 10px;
+  font-size: 13px;
+  color: #2B59C3;
+  white-space: nowrap;
+}
+.jd-captcha-refresh:hover {
+  text-decoration: underline;
+}
+.jd-btn-login:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.jd-agreement {
+  color: #2B59C3;
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+.jd-agreement:focus,
+.jd-agreement:focus-visible,
+.jd-agreement:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* --- 注册页：用户协议弹窗 --- */
+.jd-modal-mask {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+.jd-modal {
+  width: 640px;
+  max-width: calc(100% - 40px);
+  max-height: 76vh;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.jd-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.jd-modal-head h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333333;
+}
+.jd-modal-close {
+  font-size: 22px;
+  line-height: 1;
+  color: #999999;
+  outline: none;
+}
+.jd-modal-close:hover {
+  color: #2B59C3;
+}
+.jd-modal-body {
+  padding: 18px 24px;
+  overflow-y: auto;
+  text-align: left;
+  font-size: 13px;
+  line-height: 1.9;
+  color: #666666;
+}
+.jd-modal-body p {
+  margin: 0 0 8px;
+}
+.jd-modal-body p:first-child,
+.jd-modal-body p:nth-child(2n) {
+  color: #333333;
+}
+.jd-modal-date {
+  margin-top: 18px;
+  text-align: right;
+  color: #999999;
+}
+.jd-modal-foot {
+  padding: 14px 24px;
+  border-top: 1px solid #f0f0f0;
+  text-align: right;
+}
+.jd-modal-btn {
+  height: 36px;
+  padding: 0 26px;
+  border: none;
+  border-radius: 18px;
+  background: linear-gradient(90deg, #3572E6 0%, #2B59C3 100%);
+  color: #ffffff;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+}
+.jd-modal-btn:hover {
+  background: #2248a3;
+}
+
+/* --- 窄屏适配：卡片改为上下结构，Logo 与卡片左边缘保持对齐 --- */
+@media (max-width: 820px) {
+  .jd-header-inner {
+    width: auto;
+    max-width: none;
+    padding: 0 20px;
+    height: 68px;
+  }
+  .jd-card {
+    flex-direction: column;
+    padding: 30px 0;
+    max-width: 100%;
+  }
+  .jd-qr-area {
+    width: 100%;
+    padding: 0 25px 28px;
+    border-right: none;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .jd-form-area {
+    width: 100%;
+    padding: 28px 25px 0;
+  }
+}

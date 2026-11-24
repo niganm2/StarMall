@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
+import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -29,9 +30,23 @@ public class SentinelRuleConfig {
     public static final String ITEM_QUERY_RESOURCE = "item:queryByIds";
 
     /**
-     * 商品查询接口 QPS 上限
+     * 商品分页资源名，与 ItemController 上 @SentinelResource 的 value 保持一致
      */
-    private static final double QPS_LIMIT = 50D;
+    public static final String ITEM_PAGE_RESOURCE = "item:page";
+
+    /**
+     * 商品分页允许同时占用的 Servlet 线程数。
+     * 分页走 MySQL、搜索走 ES，二者共用同一个 Tomcat 线程池，
+     * 限制分页的并发线程数可保证慢分页不会把搜索接口的线程耗尽，实现线程隔离。
+     */
+    private static final int PAGE_MAX_CONCURRENCY = 100;
+
+    /**
+     * 商品查询接口 QPS 上限。
+     * 该接口除了对外查询，还会被 trade-service 下单时通过 Feign 内部调用，
+     * 阈值必须覆盖下单高峰的内部调用量，否则内部调用被误限流会直接导致下单失败。
+     */
+    private static final double QPS_LIMIT = 500D;
 
     /**
      * 慢调用判定阈值（毫秒）
@@ -46,9 +61,17 @@ public class SentinelRuleConfig {
         flowRule.setGrade(RuleConstant.FLOW_GRADE_QPS);
         flowRule.setCount(QPS_LIMIT);
         flowRule.setLimitApp("default");
-        FlowRuleManager.loadRules(Collections.singletonList(flowRule));
 
-        // 2.熔断降级规则：统计窗口内平均响应时间超过 500ms 即熔断 10 秒，期间请求直接走兜底逻辑
+        // 2.线程数流控：限制分页接口同时占用的线程数，实现与搜索接口的线程隔离
+        FlowRule pageRule = new FlowRule();
+        pageRule.setResource(ITEM_PAGE_RESOURCE);
+        pageRule.setGrade(RuleConstant.FLOW_GRADE_THREAD);
+        pageRule.setCount(PAGE_MAX_CONCURRENCY);
+        pageRule.setLimitApp("default");
+
+        FlowRuleManager.loadRules(Arrays.asList(flowRule, pageRule));
+
+        // 3.熔断降级规则：统计窗口内平均响应时间超过 500ms 即熔断 10 秒，期间请求直接走兜底逻辑
         DegradeRule degradeRule = new DegradeRule();
         degradeRule.setResource(ITEM_QUERY_RESOURCE);
         degradeRule.setGrade(RuleConstant.DEGRADE_GRADE_RT);
@@ -60,5 +83,6 @@ public class SentinelRuleConfig {
 
         log.info("Sentinel 规则加载完成：资源={}, QPS限流={}, 慢调用熔断阈值={}ms",
                 ITEM_QUERY_RESOURCE, QPS_LIMIT, SLOW_RT_MILLIS);
+        log.info("Sentinel 线程隔离已启用：资源={}, 最大并发线程={}", ITEM_PAGE_RESOURCE, PAGE_MAX_CONCURRENCY);
     }
 }

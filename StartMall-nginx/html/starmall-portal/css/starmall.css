@@ -127,6 +127,25 @@ section,.content-wrap,.panel{
   border-radius: var(--radius-sm) 0 0 var(--radius-sm) !important;
 }
 
+/* 搜索框与搜索按钮等高对齐 */
+.search .input-append .input-error {
+  height: 38px !important;
+  padding: 0 12px !important;
+  line-height: 34px !important;
+  font-size: 14px !important;
+  box-sizing: border-box !important;
+  vertical-align: top !important;
+}
+.search .input-append .btn-danger,
+.header .search .input-append .btn-danger {
+  height: 38px !important;
+  padding: 0 22px !important;
+  line-height: 34px !important;
+  font-size: 16px !important;
+  box-sizing: border-box !important;
+  vertical-align: top !important;
+}
+
 /* ---- 3. 促销小字导航（首个原红色 → 星空蓝加粗） ---- */
 .hotwords ul li {
   color: var(--text-second);
@@ -150,6 +169,24 @@ section,.content-wrap,.panel{
 }
 .navArea ul.nav li a:hover {
   color: var(--primary-color) !important;
+}
+
+/* ---- 4.1 主导航 8 项固定在同一行显示 ---- */
+.navArea ul.nav {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.navArea ul.nav li {
+  float: none;
+  flex: 0 0 auto;
+  padding: 0 10px;
+  white-space: nowrap;
 }
 
 /* ---- 5. 右侧快讯盒子：大圆角 + 柔和阴影 ---- */
@@ -212,6 +249,37 @@ section,.content-wrap,.panel{
 .shopnum {
   background: var(--secondary-color) !important;
   color: var(--text-main) !important;
+}
+
+/* ---- 8.1 首页「我的订单」：位于购物车按钮正下方，尺寸与其一致，间隔 10px ---- */
+.shopArea .shopcar .order-entry {
+  display: block;
+  width: 145.33px;
+  height: 31.33px;
+  margin-top: 10px;
+  padding: 4px 0;
+  text-align: center;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.shopArea .shopcar .order-entry .order-icon {
+  margin-right: 4px;
+  vertical-align: -2px;
+}
+
+.shopArea .shopcar .order-entry .shopnum {
+  top: -6px;
+  right: 4px;
+}
+
+/* 我的购物车 / 我的订单：鼠标悬停时加深背景色 */
+.shopArea .shopcar .sui-btn {
+  transition: background-color 0.2s;
+}
+.shopArea .shopcar .sui-btn:hover {
+  background-color: #e3ecff !important;
+  color: var(--primary-color);
 }
 
 /* ---- 9. 今日推荐区块（深灰块 → 星空蓝；整行中圆角） ---- */
@@ -424,6 +492,29 @@ html body .hotwords ul li:first-child {
   cursor: pointer;
 }
 
+/* ---- 17.1 楼层板块（家用电器/手机通讯）：整体内边距 20px，内容自适应铺满 ---- */
+.floor > .py-container {
+  padding: 20px;
+  box-sizing: border-box;
+}
+.floor .Floor-1 {
+  display: flex;
+  width: 100%;
+  height: 360px;
+}
+.floor .Floor-1 > div {
+  float: none;
+  flex-shrink: 1;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.floor .Floor-1 img {
+  max-width: 100%;
+}
+.floor .split .floor-x-line {
+  width: 100%;
+}
+
 /* ---- 18. 猜你喜欢商品卡片：8px 圆角 + hover 轻微上浮 ---- */
 .like .picDl dd {
   border: 1px solid var(--border-color) !important;
@@ -442,12 +533,116 @@ html body .hotwords ul li:first-child {
   border-right: none !important;
 }
 
+/* ---- 18.1 猜你喜欢：单行 5 个商品铺满，左右各留 20px ---- */
+.like > .py-container {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  box-sizing: border-box;
+}
+#picLBxxl > li {
+  height: auto;
+}
+.like ul.Favourate {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 12px;
+  padding: 10px 0;
+  margin: 0;
+}
+.like .Favourate li {
+  display: block;
+  float: none;
+  flex: 1 1 0;
+  min-width: 0;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  background: transparent;
+  box-sizing: border-box;
+}
+.like .Favourate li .picDl {
+  display: block;
+  position: static;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  box-sizing: border-box;
+}
+.like .Favourate li .picDl dd {
+  display: block;
+  float: none;
+  width: 100%;
+  margin: 0;
+  padding: 8px 8px 10px;
+  box-sizing: border-box;
+}
+.like .Favourate li .pic {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+.like .Favourate li img {
+  display: block;
+  width: 100%;
+  height: 142px;
+  padding: 0;
+  object-fit: contain;
+}
+.like .Favourate li .like-text {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 66px;
+  padding: 8px 0 0;
+  border-right: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.like .Favourate .like-text p {
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 18px;
+  color: #333333;
+}
+.like .Favourate .like-text h3 {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  margin: 0;
+  font-size: 16px;
+  line-height: 22px;
+  white-space: nowrap;
+}
+
 /* ---- 19. 底部品牌栏：12px 圆角白底 + logo 灰度交互 ---- */
 .brand .Brand-list {
   border-radius: var(--radius-lg) !important;
   background: #ffffff !important;
   border: 1px solid var(--border-color) !important;
   box-shadow: 0 2px 8px rgba(43, 89, 195, 0.1);
+}
+
+/* 品牌栏：10 个 Logo 单行等分铺满 */
+.brand .Brand-list {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+.brand .Brand-list > li {
+  float: none;
+  flex: 1 1 0;
+  width: auto;
+  min-width: 0;
+  text-align: center;
+}
+.brand .Brand-list > li img {
+  max-width: 100%;
 }
 .brand .Brand-item img {
   filter: grayscale(20%);

@@ -28,16 +28,16 @@ public class CartController {
         cartService.addItem2Cart(cartFormDTO);
     }
 
-    @ApiOperation("更新购物车数据")
+    @ApiOperation("更新购物车数据（只能改数量，且不能超过库存）")
     @PutMapping
     public void updateCart(@RequestBody Cart cart){
-        cartService.updateById(cart);
+        cartService.updateCart(cart);
     }
 
     @ApiOperation("删除购物车中商品")
     @DeleteMapping("{id}")
     public void deleteCartItem(@Param ("购物车条目id")@PathVariable("id") Long id){
-        cartService.removeById(id);
+        cartService.removeMyCartItem(id);
     }
 
     @ApiOperation("查询购物车列表")

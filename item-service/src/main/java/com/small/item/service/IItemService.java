@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 import com.small.api.dto.ItemDTO;
 import com.small.api.dto.OrderDetailDTO;
+import com.small.common.domain.PageDTO;
+import com.small.common.domain.PageQuery;
 import com.small.item.domain.po.Item;
 
 import java.util.Collection;
@@ -20,6 +22,8 @@ import java.util.List;
  * @since 2026-07-12
  */
 public interface IItemService extends IService<Item> {
+
+    PageDTO<ItemDTO> queryItemPage(PageQuery query);
 
     void deductStock(List<OrderDetailDTO> items);
 

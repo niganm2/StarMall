@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+  <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
+  <title>星购商城 StarMall - 注册</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico?v=20261016"/>
+
+  <link rel="stylesheet" type="text/css" href="./css/index.css"/>
+  <link rel="stylesheet" type="text/css" href="./css/webbase.css"/>
+  <link rel="stylesheet" type="text/css" href="./css/pages-login.css"/>
+  <link rel="stylesheet" type="text/css" href="./css/starmall-login.css?v=20261202"/>
+</head>
+
+<body>
+<div class="login-box" id="registerApp">
+
+  <!--顶部 Logo-->
+  <header class="jd-header">
+    <div class="jd-header-inner">
+      <img src="./img/logo.png?v=20261015" alt="星购商城 StarMall" class="jd-logo">
+      <span class="jd-header-tip">欢迎注册星购商城</span>
+    </div>
+  </header>
+
+  <!--注册卡片-->
+  <main class="jd-main">
+    <div class="jd-card">
+
+      <!--左侧：扫码登录（与登录页保持一致的版式）-->
+      <section class="jd-qr-area">
+        <h3 class="jd-qr-title">APP 扫码登录</h3>
+        <p class="jd-qr-sub">已有账号？打开 <b>星购商城 APP</b> 扫码登录</p>
+        <div class="jd-qr-box">
+          <img src="./img/erweima.png" alt="扫码登录二维码">
+        </div>
+        <p class="jd-qr-tip">扫码登录更安全</p>
+      </section>
+
+      <!--右侧：注册表单-->
+      <section class="jd-form-area">
+        <div class="jd-tabs">
+          <a href="javascript:void(0)" class="active">新用户注册</a>
+          <a href="./login.html">已有账号登录</a>
+        </div>
+
+        <form class="jd-form" @submit.prevent="register">
+          <div class="jd-field">
+            <input id="username" type="text" placeholder="用户名（4~20 位字母、数字、下划线）" v-model="form.username" maxlength="20">
+          </div>
+          <div class="jd-field">
+            <input id="password" type="password" placeholder="密码（6~20 位）" v-model="form.password" maxlength="20">
+          </div>
+          <div class="jd-field">
+            <input id="confirmPassword" type="password" placeholder="请再次输入密码" v-model="form.confirmPassword" maxlength="20">
+          </div>
+          <div class="jd-field jd-field-captcha">
+            <input id="captcha" type="text" placeholder="请输入右侧验证码" v-model="form.captcha" maxlength="4">
+            <canvas id="captchaCanvas" width="110" height="42" title="看不清？换一张" @click="refreshCaptcha"></canvas>
+            <a href="javascript:void(0)" class="jd-captcha-refresh" @click="refreshCaptcha">换一张</a>
+          </div>
+          <p class="jd-msg" v-text="msg"></p>
+          <button type="submit" class="jd-btn-login" :disabled="submitting">注&nbsp;&nbsp;册</button>
+        </form>
+
+        <div class="jd-links">
+          <span class="jd-third">
+            注册即表示同意
+            <a href="javascript:void(0)" class="jd-agreement" @click="showAgreement = true">《用户协议》</a>
+          </span>
+          <span class="jd-link-group">
+            <a href="./login.html">已有账号？去登录</a>
+          </span>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!--用户协议弹窗-->
+  <div class="jd-modal-mask" v-show="showAgreement" @click.self="showAgreement = false">
+    <div class="jd-modal">
+      <div class="jd-modal-head">
+        <h3>星购商城用户协议</h3>
+        <a href="javascript:void(0)" class="jd-modal-close" @click="showAgreement = false">×</a>
+      </div>
+      <div class="jd-modal-body">
+        <p>一、协议的接受</p>
+        <p>欢迎使用星购商城 StarMall（以下简称“本平台”）。您在注册、登录或使用本平台服务前，应当认真阅读本协议全部内容。您点击“注册”即视为您已充分理解并同意本协议的全部条款。</p>
+        <p>二、账号注册与使用</p>
+        <p>1. 您应提供真实、准确的注册信息，并对账号下的全部行为负责。</p>
+        <p>2. 账号仅限您本人使用，不得出借、转让或出售。如发现账号异常，请及时联系客服。</p>
+        <p>3. 您应妥善保管账号及密码，因保管不善造成的损失由您自行承担。</p>
+        <p>三、用户行为规范</p>
+        <p>您承诺不利用本平台从事任何违法违规活动，包括但不限于发布违法信息、恶意刷单、攻击系统、批量注册账号等。如有违反，本平台有权限制或终止您的账号使用。</p>
+        <p>四、订单与支付</p>
+        <p>1. 商品信息、价格以页面展示为准，下单即视为您愿意按该价格购买。</p>
+        <p>2. 订单提交后请在规定时间内完成支付，超时未支付的订单将被自动取消，库存自动回补。</p>
+        <p>3. 因系统故障、库存异常等原因导致订单无法履行的，本平台有权取消订单并退回已支付款项。</p>
+        <p>五、个人信息保护</p>
+        <p>本平台重视您的个人信息保护，仅在为您提供服务所必需的范围内收集、使用您的信息，未经您同意不会向第三方披露，法律法规另有规定的除外。</p>
+        <p>六、免责声明</p>
+        <p>因不可抗力、网络故障、第三方服务异常等非本平台原因导致的服务中断或数据延迟，本平台不承担相应责任，但会尽合理努力减少影响。</p>
+        <p>七、协议的变更</p>
+        <p>本平台有权根据业务需要修改本协议，修改后的协议将在平台公示。若您继续使用本平台服务，即视为接受修改后的协议。</p>
+        <p>八、其他</p>
+        <p>本协议的解释、效力及争议解决均适用中华人民共和国法律。如本协议任何条款被认定为无效，不影响其他条款的效力。</p>
+        <p class="jd-modal-date">星购商城 StarMall<br>2026 年 11 月</p>
+      </div>
+      <div class="jd-modal-foot">
+        <button type="button" class="jd-modal-btn" @click="showAgreement = false">我已知晓</button>
+      </div>
+    </div>
+  </div>
+
+  <!--底部版权-->
+  <footer class="copyright jd-footer">
+    <ul>
+      <li>关于星购</li>
+      <li>联系我们</li>
+      <li>隐私政策</li>
+      <li>用户协议</li>
+    </ul>
+    <p>星购商城 StarMall 版权所有 ©2026</p>
+    <p>客服热线：400-668-8899&nbsp;&nbsp;网址：http://www.starmall.com</p>
+  </footer>
+
+</div>
+
+</body>
+<script src="./js/vue.js"></script>
+<script src="./js/axios.min.js"></script>
+<script src="./js/common.js"></script>
+<script src="./js/top.js?v=20261015"></script>
+<script type="text/javascript">
+  var registerVm = new Vue({
+    el: "#registerApp",
+    data: {
+      form: {
+        username: '',
+        password: '',
+        confirmPassword: '',
+        captcha: ''
+      },
+      captchaCode: '',
+      msg: '',
+      submitting: false,
+      showAgreement: false,
+      util
+    },
+    mounted() {
+      this.refreshCaptcha()
+    },
+    methods: {
+      // 生成 4 位验证码（不区分大小写）
+      refreshCaptcha() {
+        var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+        var code = ''
+        for (var i = 0; i < 4; i++) {
+          code += chars.charAt(Math.floor(Math.random() * chars.length))
+        }
+        this.captchaCode = code
+        this.drawCaptcha(code)
+      },
+      drawCaptcha(code) {
+        var canvas = document.getElementById('captchaCanvas')
+        if (!canvas) return
+        var ctx = canvas.getContext('2d')
+        var w = canvas.width
+        var h = canvas.height
+        // 背景
+        ctx.fillStyle = '#f5f5f5'
+        ctx.fillRect(0, 0, w, h)
+        // 干扰线
+        for (var i = 0; i < 4; i++) {
+          ctx.strokeStyle = 'rgba(43,89,195,' + (0.15 + Math.random() * 0.25) + ')'
+          ctx.beginPath()
+          ctx.moveTo(Math.random() * w, Math.random() * h)
+          ctx.lineTo(Math.random() * w, Math.random() * h)
+          ctx.stroke()
+        }
+        // 字符
+        for (var j = 0; j < code.length; j++) {
+          ctx.save()
+          ctx.font = 'bold ' + (22 + Math.random() * 4) + 'px Arial'
+          ctx.fillStyle = 'rgb(' + (30 + Math.random() * 60) + ',' + (60 + Math.random() * 60) + ',' + (150 + Math.random() * 80) + ')'
+          ctx.translate(14 + j * 24, 28)
+          ctx.rotate((Math.random() - 0.5) * 0.4)
+          ctx.fillText(code.charAt(j), 0, 0)
+          ctx.restore()
+        }
+        // 干扰点
+        for (var k = 0; k < 24; k++) {
+          ctx.fillStyle = 'rgba(120,120,120,' + Math.random() * 0.5 + ')'
+          ctx.beginPath()
+          ctx.arc(Math.random() * w, Math.random() * h, 1, 0, Math.PI * 2)
+          ctx.fill()
+        }
+      },
+      register() {
+        var f = this.form
+        this.msg = ''
+        // 1.校验用户名
+        if (!/^[a-zA-Z0-9_]{4,20}$/.test(f.username)) {
+          this.msg = '用户名需为 4~20 位字母、数字或下划线'
+          return
+        }
+        // 2.校验密码
+        if (f.password.length < 6 || f.password.length > 20) {
+          this.msg = '密码长度需在 6~20 位之间'
+          return
+        }
+        // 3.校验确认密码
+        if (f.password !== f.confirmPassword) {
+          this.msg = '两次输入的密码不一致'
+          return
+        }
+        // 4.校验验证码（不区分大小写）
+        if (f.captcha.trim().toLowerCase() !== this.captchaCode.toLowerCase()) {
+          this.msg = '验证码不正确，请重新输入'
+          this.refreshCaptcha()
+          f.captcha = ''
+          return
+        }
+        // 5.提交注册
+        this.submitting = true
+        axios.post('/users/register', {
+          username: f.username,
+          password: f.password
+        }).then(() => {
+          this.msg = '注册成功，正在跳转登录页…'
+          setTimeout(() => location.href = './login.html', 1200)
+        }).catch(err => {
+          var data = err.response && err.response.data
+          this.msg = (data && data.msg) || '注册失败，请稍后重试'
+          this.refreshCaptcha()
+          f.captcha = ''
+        }).then(() => {
+          this.submitting = false
+        })
+      }
+    }
+  });
+</script>
+</html>

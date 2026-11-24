@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿﻿﻿﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -9,6 +9,7 @@
   <link rel="stylesheet" type="text/css" href="./css/webbase.css"/>
   <link rel="stylesheet" type="text/css" href="./css/pay.css"/>
   <link rel="stylesheet" type="text/css" href="./css/pages-weixinpay.css"/>
+  <link rel="stylesheet" type="text/css" href="./css/top-bar.css?v=20261204"/>
 </head>
 
 <body>
@@ -91,7 +92,7 @@
 <script src="./js/vue.js"></script>
 <script src="./js/axios.min.js"></script>
 <script src="js/common.js"></script>
-<script src="js/top.js"></script>
+<script src="js/top.js?v=20261206"></script>
 <script src="js/qrcode.min.js"></script>
 <script>
   let app = new Vue({
@@ -119,8 +120,8 @@
           this.tab = this.order.paymentType;
           // 创建支付单
           this.createPayOrder(this.order.id);
-          // 设置倒计时
-          const deadLine = new Date(this.order.createTime).getTime() + 1800000;
+          // 设置倒计时：与后端保持一致，15 分钟内未支付自动取消
+          const deadLine = new Date(this.order.createTime).getTime() + 15 * 60 * 1000;
           const tid = setInterval(() => {
             const remainTime = deadLine - new Date().getTime();
             this.remainTime = Math.floor(remainTime / 60000) + "分" + Math.floor((remainTime % 60000) / 1000) + "秒";

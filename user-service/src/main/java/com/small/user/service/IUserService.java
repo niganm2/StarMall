@@ -2,6 +2,7 @@ package com.small.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.small.user.domain.dto.LoginFormDTO;
+import com.small.user.domain.dto.RegisterFormDTO;
 import com.small.user.domain.po.User;
 import com.small.user.domain.vo.UserLoginVO;
 
@@ -17,5 +18,9 @@ public interface IUserService extends IService<User> {
 
     UserLoginVO login(LoginFormDTO loginFormDTO);
 
+    void register(RegisterFormDTO registerFormDTO);
+
     void deductMoney(String pw, Integer totalFee);
+
+    void refundMoney(Integer amount);
 }

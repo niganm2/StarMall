@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿﻿﻿﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -8,7 +8,8 @@
   <title>星购商城 StarMall - 购物车</title>
 
   <link rel="stylesheet" type="text/css" href="css/webbase.css" />
-  <link rel="stylesheet" type="text/css" href="css/pages-cart.css" />
+  <link rel="stylesheet" type="text/css" href="css/pages-cart.css?v=202611243" />
+  <link rel="stylesheet" type="text/css" href="css/top-bar.css?v=20261204" />
 </head>
 
 <body>
@@ -74,9 +75,14 @@
                   </li>
                   <li class="yui3-u-1-8"><span style="line-height:70px " class="sum"
                       v-text="util.formatPrice((c.newPrice || c.price) * c.num)"></span></li>
-                  <li class="yui3-u-1-12">
-                    <a href="#" @click.prevent="deleteCart(i)">删除</a><br />
-                    <a href="#none">移到我的关注</a><br />
+                  <li class="yui3-u-1-12 cart-ops-cell">
+                    <div class="cart-ops">
+                      <button type="button" class="btn-del" @click="deleteCart(i)">删除</button>
+                      <button type="button" class="btn-focus" :class="{focused: isFocused(c.itemId)}"
+                        title="移到我的关注" @click="toggleFocus(c)">
+                        <span class="star">{{ isFocused(c.itemId) ? '★' : '☆' }}</span>
+                      </button>
+                    </div>
                     <span v-show="c.status !== 1" style="color: red;">商品已经下架</span>
                     <span v-show="c.num > c.stock" style="color: red;">商品库存不足</span>
                   </li>
@@ -108,26 +114,6 @@
           </div>
         </div>
         <div class="clearfix"></div>
-        <div class="deled">
-          <span>已删除商品，您可以重新购买或加关注：</span>
-          <div class="cart-list del">
-            <ul class="goods-list yui3-g">
-              <li class="yui3-u-1-2">
-                <div class="good-item">
-                  <div class="item-msg">Apple Macbook Air 13.3英寸笔记本电脑 银色（Corei5）处理器/8GB内存</div>
-                </div>
-              </li>
-              <li class="yui3-u-1-6"><span class="price">8848.00</span></li>
-              <li class="yui3-u-1-6">
-                <span class="number">1</span>
-              </li>
-              <li class="yui3-u-1-8">
-                <a href="#none">重新购买</a>
-                <a href="#none">移到我的关注</a>
-              </li>
-            </ul>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -135,7 +121,7 @@
   <script src="./js/vue.js"></script>
   <script src="./js/axios.min.js"></script>
   <script src="./js/common.js"></script>
-  <script src="./js/top.js"></script>
+  <script src="./js/top.js?v=20261206"></script>
   <script type="text/javascript">
     const cartVm = new Vue({
       el: "#cartApp",
@@ -145,11 +131,17 @@
         user: null,
         selectedCarts: [],
         enableCarts: [],
-        selectAll: true
+        selectAll: true,
+        focusIds: []
       },
       async created() {
         util.store.set("return-url", location.href);
         this.user = util.store.get("user-info")
+        try {
+          this.focusIds = JSON.parse(localStorage.getItem("focus-items") || "[]");
+        } catch (e) {
+          this.focusIds = [];
+        }
         if (!util.isLogin()) {
           // 未登录直接跳转到登录页面
           location.href = "login.html"
@@ -213,6 +205,23 @@
             .catch(() => {
               alert("服务器忙");
             });
+        },
+        isFocused(itemId) {
+          return this.focusIds.indexOf(String(itemId)) >= 0;
+        },
+        toggleFocus(c) {
+          const id = String(c.itemId);
+          const list = this.focusIds.slice();
+          const idx = list.indexOf(id);
+          if (idx >= 0) {
+            // 已关注，取消关注
+            list.splice(idx, 1);
+          } else {
+            // 未关注，加入关注
+            list.push(id);
+          }
+          this.focusIds = list;
+          localStorage.setItem("focus-items", JSON.stringify(list));
         },
         toOrderInfo() {
           // 把已选中的购物车商品保存到localStorage

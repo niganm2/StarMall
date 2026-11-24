@@ -14,6 +14,12 @@ public class PayClientFallback implements FallbackFactory<PayClient> {
             public PayOrderDTO queryPayOrderByBizOrderNo(Long id) {
                 return null;
             }
+
+            @Override
+            public void refundPayOrder(Long bizOrderNo) {
+                log.error("调用支付服务退款失败，bizOrderNo={}", bizOrderNo, cause);
+                throw new RuntimeException("支付服务繁忙，退款失败，请稍后重试", cause);
+            }
         };
     }
 }

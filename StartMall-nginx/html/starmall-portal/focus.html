@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+  <title>星购商城 StarMall - 我的关注</title>
+  <link rel="stylesheet" type="text/css" href="css/webbase.css" />
+  <link rel="stylesheet" type="text/css" href="css/top-bar.css?v=20261204" />
+  <style>
+    body {
+      background: #f5f5f5
+    }
+
+    .focus-page {
+      width: 1210px;
+      min-height: 420px;
+      margin: 20px auto;
+      padding: 24px 28px;
+      background: #fff;
+      box-sizing: border-box
+    }
+
+    .focus-title {
+      margin: 0 0 20px;
+      font-size: 22px;
+      font-weight: 700;
+      color: #333
+    }
+
+    .focus-count {
+      font-size: 14px;
+      font-weight: 400;
+      color: #999
+    }
+
+    .focus-list {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px
+    }
+
+    .focus-item {
+      padding: 10px;
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 4px;
+      transition: box-shadow .2s
+    }
+
+    .focus-item:hover {
+      box-shadow: 0 2px 12px rgba(0, 0, 0, .12)
+    }
+
+    .focus-img {
+      display: block;
+      height: 180px;
+      overflow: hidden;
+      text-align: center
+    }
+
+    .focus-img img {
+      max-width: 100%;
+      max-height: 100%
+    }
+
+    .focus-name {
+      display: block;
+      height: 40px;
+      margin: 8px 0;
+      overflow: hidden;
+      font-size: 13px;
+      line-height: 20px;
+      color: #333;
+      text-decoration: none
+    }
+
+    .focus-name:hover {
+      color: #2b59c3
+    }
+
+    .focus-price {
+      margin-bottom: 8px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #e4393c
+    }
+
+    .focus-ops {
+      display: flex;
+      gap: 8px
+    }
+
+    .focus-ops button {
+      flex: 1;
+      height: 30px;
+      border-radius: 3px;
+      cursor: pointer
+    }
+
+    .focus-buy {
+      border: none;
+      background: #2b59c3;
+      color: #fff
+    }
+
+    .focus-buy:hover {
+      background: #1f47a3
+    }
+
+    .focus-cancel {
+      border: 1px solid #ddd;
+      background: #fff;
+      color: #666
+    }
+
+    .focus-cancel:hover {
+      border-color: #e4393c;
+      color: #e4393c
+    }
+
+    .focus-empty {
+      padding: 80px 0;
+      text-align: center;
+      color: #999
+    }
+
+    .focus-go {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 8px 24px;
+      background: #2b59c3;
+      color: #fff;
+      border-radius: 3px;
+      text-decoration: none
+    }
+
+    .focus-star {
+      margin-right: 4px;
+      color: #f5b301
+    }
+  </style>
+</head>
+
+<body>
+<div id="focusApp">
+  <top></top>
+  <div class="focus-page">
+    <h2 class="focus-title"><span class="focus-star">★</span>我的关注<span class="focus-count">（{{items.length}}）</span></h2>
+
+    <div class="focus-empty" v-if="!loading && items.length === 0">
+      <p>你还没有关注的商品，去购物车点亮商品右侧的星标即可关注</p>
+      <a class="focus-go" href="/cart.html">去购物车看看</a>
+    </div>
+
+    <div class="focus-list" v-else>
+      <div class="focus-item" v-for="item in items" :key="item.id">
+        <a class="focus-img" :href="'/search.html?key=' + encodeURIComponent(item.name)">
+          <img :src="item.image" :alt="item.name" />
+        </a>
+        <a class="focus-name" :href="'/search.html?key=' + encodeURIComponent(item.name)">{{item.name}}</a>
+        <div class="focus-price">￥{{formatPrice(item.price)}}</div>
+        <div class="focus-ops">
+          <button class="focus-buy" @click="buy(item)">立即购买</button>
+          <button class="focus-cancel" @click="cancel(item.id)">取消关注</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/vue.js"></script>
+<script src="js/axios.min.js"></script>
+<script src="js/common.js"></script>
+<script src="js/top.js?v=20261206"></script>
+<script>
+  let focusApp = new Vue({
+    el: "#focusApp",
+    data: {
+      items: [],
+      loading: true
+    },
+    created() {
+      this.load();
+    },
+    methods: {
+      // 读取本地保存的关注商品id（兼容旧的id字符串数组）
+      ids() {
+        let raw = [];
+        try {
+          raw = JSON.parse(localStorage.getItem("focus-items") || "[]");
+        } catch (e) {
+          raw = [];
+        }
+        return (raw || [])
+          .map(v => (v && typeof v === "object") ? v.id : v)
+          .filter(v => v !== null && v !== undefined && v !== "")
+          .map(String);
+      },
+      load() {
+        const ids = this.ids();
+        if (ids.length === 0) {
+          this.items = [];
+          this.loading = false;
+          return;
+        }
+        axios.get("/items", { params: { ids: ids.join(",") } })
+          .then(resp => {
+            this.items = resp || [];
+          })
+          .catch(() => {
+            this.items = [];
+          })
+          .finally(() => {
+            this.loading = false;
+          })
+      },
+      cancel(id) {
+        if (!confirm("确定取消关注该商品吗？")) {
+          return;
+        }
+        const ids = this.ids().filter(v => v !== String(id));
+        localStorage.setItem("focus-items", JSON.stringify(ids));
+        this.items = this.items.filter(i => String(i.id) !== String(id));
+      },
+      buy(item) {
+        if (!util.isLogin()) {
+          location.href = "/login.html";
+          return;
+        }
+        util.store.set("selectedCarts", [{
+          id: item.id,
+          itemId: item.id,
+          name: item.name,
+          price: item.price,
+          num: 1,
+          stock: item.stock || 9999,
+          image: item.image,
+          spec: item.spec || "{}",
+          status: 1
+        }]);
+        location.href = "/order-confirm.html";
+      },
+      formatPrice(p) {
+        return util.formatPrice(p);
+      }
+    }
+  });
+</script>
+</body>
+
+</html>

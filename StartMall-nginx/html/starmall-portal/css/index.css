@@ -10,22 +10,34 @@
 }
 
 .search-bar input {
-    border: 1px solid #df3033;
+    border: 1px solid var(--primary-color, #2B59C3);
     width: 85%;
-    height: 28px;
-    line-height: 28px;
+    height: 38px;
+    line-height: 36px;
+    padding: 0 10px;
+    box-sizing: border-box;
     vertical-align: top;
     border-radius: .25rem 0 0 .25rem;
+    outline: none;
 }
 
 .search-bar button {
     width: 20%;
-    border: 1px solid #df3033;
-    background-color: #df3033;
+    height: 38px;
+    line-height: 36px;
+    padding: 0;
+    border: 1px solid var(--primary-color, #2B59C3);
+    background-color: var(--primary-color, #2B59C3);
     color: #fff;
-    line-height: 28px;
+    box-sizing: border-box;
+    cursor: pointer;
     margin-left: -6px;
     border-radius: 0 .25rem .25rem 0;
+}
+
+.search-bar button:hover {
+    background-color: #2248a3;
+    border-color: #2248a3;
 }
 .ad-mark {
     position: absolute;
@@ -33,7 +45,7 @@
     top: -10px;
 }
 #complete-box {
-    margin-top: 28px;
+    margin-top: 38px;
     position: absolute;
     z-index: 99;
     text-align: left;

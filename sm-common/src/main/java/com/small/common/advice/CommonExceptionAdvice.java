@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.util.NestedServletException;
@@ -50,6 +51,12 @@ public class CommonExceptionAdvice {
         log.error("请求参数绑定异常 ->BindException， {}", e.getMessage());
         log.debug("", e);
         return processResponse(new BadRequestException("请求参数格式错误"));
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public Object handleMethodNotSupported(HttpRequestMethodNotSupportedException e) {
+        log.warn("请求方法不支持 -> {}", e.getMessage());
+        return processResponse(new CommonException("请求方法不支持", 405));
     }
 
     @ExceptionHandler(NestedServletException.class)

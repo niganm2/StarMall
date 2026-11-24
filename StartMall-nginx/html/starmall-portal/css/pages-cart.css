@@ -260,3 +260,86 @@ a.sum-btn {
 .cartxt {
 	padding-left: 23px
 }
+
+/* 商品行高度随内容自适应：覆盖 webbase.css 中 ul.yui3-g>li{height:100%}，避免每行被拉伸到 800px+ */
+.cart-list .goods-list > li {
+	height: auto
+}
+
+/* 购物车操作列：删除按钮 + 关注星标按钮，等宽、垂直居中、间隔 20px */
+.cart-list .cart-ops-cell {
+	text-align: center
+}
+
+.cart-list .cart-ops {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 20px;
+	padding: 12px 0
+}
+
+.cart-list .cart-ops button {
+	width: 80px;
+	height: 32px;
+	padding: 0;
+	box-sizing: border-box;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	font-size: 14px;
+	line-height: 30px;
+	text-align: center;
+	cursor: pointer
+}
+
+.cart-list .cart-ops .btn-del {
+	background-color: #e4393c;
+	color: #fff
+}
+
+.cart-list .cart-ops .btn-del:hover {
+	background-color: #c81623
+}
+
+.cart-list .cart-ops .btn-focus {
+	background-color: #fff;
+	border-color: #ddd;
+	color: #bbb;
+	font-size: 20px
+}
+
+.cart-list .cart-ops .btn-focus .star {
+	line-height: 1
+}
+
+.cart-list .cart-ops .btn-focus.focused {
+	color: #f5b301;
+	border-color: #f5b301
+}
+
+/* 购物车页 logo 区：整体 60px 高，logo 与标题同一行垂直居中 */
+.cart .logoArea {
+	flex-direction: row;
+	align-items: center;
+	height: 60px;
+	overflow: visible
+}
+
+.cart .logoArea > a > .logo {
+	width: 200px;
+	height: 55px
+}
+
+.cart .logoArea > a > .logo > img {
+	width: 185px;
+	height: 60px
+}
+
+.cart .logoArea span {
+	align-self: center;
+	line-height: 24px;
+	margin-top: 0;
+	margin-left: 8px;
+	text-align: left
+}

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿﻿﻿﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -9,8 +9,9 @@
 
   <link rel="stylesheet" type="text/css" href="css/webbase2.css"/>
   <link rel="stylesheet" type="text/css" href="css/pages-index.css"/>
-  <link rel="stylesheet" type="text/css" href="css/starmall.css?v=20261015"/>
+  <link rel="stylesheet" type="text/css" href="css/starmall.css?v=20261212"/>
   <link rel="stylesheet" type="text/css" href="css/ai-chat.css?v=20261019"/>
+  <link rel="stylesheet" type="text/css" href="css/top-bar.css?v=20261204"/>
 
   <style type="text/css">
       .carousel-inner, .carousel-inner div {
@@ -64,7 +65,7 @@
                 <li class='f-item'>9.9团购</li>
                 <li class='f-item'>每满99减30</li>
                 <li class='f-item'>好物专场</li>
-                <li class='f-item'>限时秒杀</li>
+                <li class='f-item'><a href="/seckill-index.html">限时秒杀</a></li>
                 <li class='f-item'>办公百货</li>
               </ul>
             </div>
@@ -76,6 +77,13 @@
                 <a class='sui-btn btn-default btn-xlarge' href='/cart.html'>
                   <span>我的购物车</span>
                   <i class='shopnum'>{{carts.length}}</i>
+                </a>
+                <a class='sui-btn btn-default btn-xlarge order-entry' href='/orders.html'>
+                  <svg class='order-icon' viewBox='0 0 24 24' width='14' height='14' aria-hidden='true'>
+                    <path d='M6 2h9l4 4v16H6z' fill='none' stroke='#2B59C3' stroke-width='2' stroke-linejoin='round'/>
+                    <path d='M9 11h7M9 15h7M9 7h2' stroke='#2B59C3' stroke-width='2' stroke-linecap='round'/>
+                  </svg>
+                  <span>我的订单</span>
                 </a>
                 <div class='clearfix shopcarlist' id='shopcarlist' style='display:none'>
                   <p>'啊哦，你的购物车还没有商品哦！'</p>
@@ -98,7 +106,7 @@
               <li class='f-item'>限时闪购</li>
               <li class='f-item'>拼团</li>
               <li class='f-item'>生活好物</li>
-              <li class='f-item'><a href='/seckill-index.html' target='_blank'>秒杀</a></li>
+              <li class='f-item'><a href='/seckill-index.html'>秒杀</a></li>
             </ul>
           </div>
           <div class='yui3-u Right'></div>
@@ -759,16 +767,9 @@
           <li class="yui3-u-1-6">
             <dl class="picDl huozhe">
               <dd>
-                <a href="" class="pic"><img src="img/like_02.png" alt=""/></a>
+                <a href="javascript:;" class="pic"><img src="img/like_02.png" alt=""/></a>
                 <div class="like-text">
                   <p>阳光美包新款单肩包女包时尚子母包四件套女</p>
-                  <h3>¥116.00</h3>
-                </div>
-              </dd>
-              <dd>
-                <a href="" class="pic"><img src="img/like_01.png" alt=""/></a>
-                <div class="like-text">
-                  <p>爱仕达 30CM炒锅不粘锅NWG8330E电磁炉炒</p>
                   <h3>¥116.00</h3>
                 </div>
               </dd>
@@ -777,16 +778,9 @@
           <li class="yui3-u-1-6">
             <dl class="picDl jilu">
               <dd>
-                <a href="" class="pic"><img src="img/like_03.png" alt=""/></a>
+                <a href="javascript:;" class="pic"><img src="img/like_01.png" alt=""/></a>
                 <div class="like-text">
                   <p>爱仕达 30CM炒锅不粘锅NWG8330E电磁炉炒</p>
-                  <h3>¥116.00</h3>
-                </div>
-              </dd>
-              <dd>
-                <a href="" class="pic"><img src="img/like_02.png" alt=""/></a>
-                <div class="like-text">
-                  <p>阳光美包新款单肩包女包时尚子母包四件套女</p>
                   <h3>¥116.00</h3>
                 </div>
               </dd>
@@ -795,18 +789,20 @@
           <li class="yui3-u-1-6">
             <dl class="picDl tuhua">
               <dd>
-                <a href="" class="pic"><img src="img/like_01.png" alt=""/></a>
+                <a href="javascript:;" class="pic"><img src="img/like_03.png" alt=""/></a>
                 <div class="like-text">
-                  <p>捷波朗 </p>
-                  <p>（jabra）BOOSI劲步</p>
+                  <p>捷波朗（jabra）BOOSI劲步</p>
                   <h3>¥236.00</h3>
                 </div>
               </dd>
+            </dl>
+          </li>
+          <li class="yui3-u-1-6">
+            <dl class="picDl tuhua">
               <dd>
-                <a href="" class="pic"><img nsrc="assets/img/like_02.png" alt=""/></a>
+                <a href="javascript:;" class="pic"><img src="img/like_01.png" alt=""/></a>
                 <div class="like-text">
-                  <p>三星（G5500）</p>
-                  <p>移动联通双网通</p>
+                  <p>三星（G5500）移动联通双网通</p>
                   <h3>¥566.00</h3>
                 </div>
               </dd>
@@ -815,53 +811,7 @@
           <li class="yui3-u-1-6">
             <dl class="picDl huozhe">
               <dd>
-                <a href="" class="pic"><img src="img/like_02.png" alt=""/></a>
-                <div class="like-text">
-                  <p>阳光美包新款单肩包女包时尚子母包四件套女</p>
-                  <h3>¥116.00</h3>
-                </div>
-              </dd>
-              <dd>
-                <a href="" class="pic"><img src="img/like_01.png" alt=""/></a>
-                <div class="like-text">
-                  <p>爱仕达 30CM炒锅不粘锅NWG8330E电磁炉炒</p>
-                  <h3>¥116.00</h3>
-                </div>
-              </dd>
-            </dl>
-          </li>
-          <li class="yui3-u-1-6">
-            <dl class="picDl jilu">
-              <dd>
-                <a href="http://sc.chinaz.com/" class="pic"><img src="img/like_03.png" alt=""/></a>
-                <div class="like-text">
-                  <p>捷波朗 </p>
-                  <p>（jabra）BOOSI劲步</p>
-                  <h3>¥236.00</h3>
-                </div>
-              </dd>
-              <dd>
-                <a href="http://sc.chinaz.com/" class="pic"><img src="img/like_02.png" alt=""/></a>
-                <div class="like-text">
-                  <p>欧普</p>
-                  <p>JYLZ08面板灯平板灯铝</p>
-                  <h3>¥456.00</h3>
-                </div>
-              </dd>
-            </dl>
-          </li>
-          <li class="yui3-u-1-6">
-            <dl class="picDl tuhua">
-              <dd>
-                <a href="http://sc.chinaz.com/" class="pic"><img src="img/like_01.png" alt=""/></a>
-                <div class="like-text">
-                  <p>三星（G5500）</p>
-                  <p>移动联通双网通</p>
-                  <h3>¥566.00</h3>
-                </div>
-              </dd>
-              <dd>
-                <a href="http://sc.chinaz.com/" class="pic"><img nsrc="assets/img/like_02.png" alt=""/></a>
+                <a href="javascript:;" class="pic"><img src="img/like_02.png" alt=""/></a>
                 <div class="like-text">
                   <p>韩国所望紧致湿润精华露400ml</p>
                   <h3>¥896.00</h3>
@@ -1157,7 +1107,7 @@
 <script src="./js/vue.js"></script>
 <script src="./js/axios.min.js"></script>
 <script src="./js/common.js"></script>
-<script src="./js/top.js?v=20261015"></script>
+<script src="./js/top.js?v=20261206"></script>
 <script src="./js/copyright.js?v=20261015"></script>
 <script src="./js/foot.js"></script>
 <script src="./js/ai-chat.js?v=20261022"></script>
@@ -1230,11 +1180,8 @@
           })
       },
       search() {
-        if (this.key !== "null") {
-          window.location = '/search.html';
-          return;
-        }
-        window.location = '/search.html?key=' + this.key;
+        const key = (this.key || "").trim();
+        window.location = key ? '/search.html?key=' + encodeURIComponent(key) : '/search.html';
       },
       getUrlParam: function (name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");

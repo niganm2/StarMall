@@ -1,7 +1,10 @@
 package com.small.api.client;
 
 import com.small.api.client.fallback.UserClientFallbackFactory;
+import com.small.api.dto.AddressDTO;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -9,4 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface UserClient {
     @PutMapping("/users//money/deduct")
     public void deductMoney(@RequestParam("pw") String pw, @RequestParam("amount") Integer amount);
+
+    @PutMapping("/users/money/refund")
+    public void refundMoney(@RequestParam("amount") Integer amount);
+
+    @GetMapping("/addresses/{addressId}")
+    public AddressDTO queryAddressById(@PathVariable("addressId") Long addressId);
 }

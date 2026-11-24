@@ -7,6 +7,7 @@ import com.small.common.exception.ForbiddenException;
 import com.small.common.utils.UserContext;
 import com.small.user.config.JwtProperties;
 import com.small.user.domain.dto.LoginFormDTO;
+import com.small.user.domain.dto.RegisterFormDTO;
 import com.small.user.domain.po.User;
 import com.small.user.domain.vo.UserLoginVO;
 import com.small.user.enums.UserStatus;
@@ -18,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -65,6 +68,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
+    public void register(RegisterFormDTO registerFormDTO) {
+        String username = registerFormDTO.getUsername().trim();
+        // 1.校验用户名是否已存在
+        if (lambdaQuery().eq(User::getUsername, username).count() > 0) {
+            throw new BadRequestException("用户名已存在，请更换一个");
+        }
+        // 2.保存用户，密码加密存储
+        User user = new User()
+                .setUsername(username)
+                .setPassword(passwordEncoder.encode(registerFormDTO.getPassword()))
+                .setStatus(UserStatus.NORMAL)
+                .setBalance(1000)
+                .setCreateTime(LocalDateTime.now())
+                .setUpdateTime(LocalDateTime.now());
+        save(user);
+    }
+
+    @Override
     public void deductMoney(String pw, Integer totalFee) {
         log.info("开始扣款");
         // 1.校验密码
@@ -80,5 +101,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             throw new BizIllegalException("余额不足");
         }
         log.info("扣款成功");
+    }
+
+    @Override
+    public void refundMoney(Integer amount) {
+        log.info("开始退款，amount={}", amount);
+        if (amount == null || amount <= 0) {
+            throw new BizIllegalException("退款金额不合法");
+        }
+        int rows = baseMapper.addMoney(UserContext.getUser(), amount);
+        if (rows != 1) {
+            throw new BizIllegalException("退款失败，用户不存在");
+        }
+        log.info("退款成功");
     }
 }

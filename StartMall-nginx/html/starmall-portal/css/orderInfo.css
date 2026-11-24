@@ -1,17 +1,370 @@
+/* 结算页数量控件，样式与购物车保持一致：[-] [1] [+] */
+.num-box {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 32px
+}
 
-.num {
-    line-height: 20px;
-    width: 60px;
-    text-align: right;
+/* 价格与数量控件在同一水平线上 */
+.send-detail .price {
+    line-height: 32px
 }
-.num span {
-    font-size: 18px;
-    line-height: 20px;
-    width: 20px;
-}
-.num-btn {
-    font-size: 16px;
-    line-height: 20px;
-    width: 30px;
+
+.num-box a.increment {
+    display: inline-block;
+    width: 24px;
+    height: 32px;
+    line-height: 30px;
     text-align: center;
+    text-decoration: none;
+    color: #333;
+    background: #f7f7f7;
+    border: 1px solid #ddd;
+    box-sizing: border-box
+}
+
+.num-box .mins {
+    border-right: 0
+}
+
+.num-box .plus {
+    border-left: 0
+}
+
+.num-box .itxt {
+    width: 40px;
+    height: 32px;
+    float: none;
+    padding: 0;
+    text-align: center;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    box-sizing: border-box
+}
+
+/* 新增收货地址弹窗 */
+.no-address {
+    line-height: 40px;
+    color: #999;
+    font-size: 14px
+}
+
+.addr-modal-mask {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, .45);
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.addr-modal {
+    width: 460px;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, .2);
+    font-family: "微软雅黑"
+}
+
+.addr-modal-head {
+    position: relative;
+    height: 46px;
+    line-height: 46px;
+    padding: 0 16px;
+    border-bottom: 1px solid #eee;
+    font-size: 16px;
+    font-weight: 700
+}
+
+.addr-modal-close {
+    position: absolute;
+    right: 14px;
+    top: 0;
+    font-size: 22px;
+    line-height: 46px;
+    color: #999;
+    cursor: pointer
+}
+
+.addr-modal-close:hover {
+    color: #e4393c
+}
+
+.addr-modal-body {
+    padding: 16px
+}
+
+.addr-parse {
+    margin-bottom: 12px
+}
+
+.addr-parse label,
+.addr-field label {
+    display: inline-block;
+    width: 70px;
+    vertical-align: top;
+    line-height: 32px;
+    font-size: 14px;
+    color: #555
+}
+
+.addr-parse textarea {
+    width: 320px;
+    height: 64px;
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    resize: vertical;
+    font-size: 13px;
+    font-family: inherit
+}
+
+.addr-field {
+    margin-bottom: 12px
+}
+
+.addr-field input {
+    width: 320px;
+    height: 32px;
+    padding: 0 8px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    font-size: 14px
+}
+
+.addr-parse textarea:focus,
+.addr-field input:focus {
+    border-color: #2b59c3;
+    outline: none
+}
+
+.addr-error {
+    min-height: 18px;
+    padding-left: 70px;
+    color: #e4393c;
+    font-size: 13px
+}
+
+.addr-modal-foot {
+    padding: 10px 16px 16px;
+    text-align: right
+}
+
+.addr-modal-foot .sui-btn {
+    margin-left: 10px
+}
+
+/* 更换地址按钮（绿色） */
+.step-tit h5 span a.newadd {
+    display: inline-block;
+    height: 28px;
+    padding: 0 14px;
+    line-height: 28px;
+    font-size: 13px;
+    font-weight: normal;
+    color: #fff;
+    background: #4caf50;
+    border-radius: 3px;
+    text-decoration: none
+}
+
+.step-tit h5 span a.newadd:hover {
+    background: #43a047
+}
+
+/* 当前选中的收货地址 */
+.addr-current {
+    padding: 6px 0;
+    font-size: 14px;
+    line-height: 26px;
+    cursor: pointer
+}
+
+.addr-current-name {
+    margin-right: 10px;
+    font-weight: 700;
+    color: #333
+}
+
+.addr-current-mobile {
+    margin-right: 12px;
+    color: #666
+}
+
+.addr-current-detail {
+    color: #666
+}
+
+/* 地址列表弹窗 */
+.addr-list-modal {
+    width: 560px
+}
+
+.addr-list-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    border-bottom: 1px solid #eee;
+    font-size: 13px
+}
+
+.addr-check-all {
+    color: #555;
+    cursor: pointer
+}
+
+.btn-batch-del {
+    padding: 4px 10px;
+    font-size: 13px;
+    color: #e4393c;
+    background: #fff;
+    border: 1px solid #e4393c;
+    border-radius: 3px;
+    cursor: pointer
+}
+
+.btn-batch-del:disabled {
+    color: #bbb;
+    border-color: #ddd;
+    cursor: not-allowed
+}
+
+.addr-list {
+    max-height: 320px;
+    overflow-y: auto;
+    padding: 8px 16px
+}
+
+.addr-list-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 8px;
+    margin-bottom: 8px;
+    border: 1px solid #eee;
+    border-radius: 4px
+}
+
+.addr-list-item.active {
+    border-color: #4caf50;
+    background: #f3fbf3
+}
+
+.addr-list-info {
+    flex: 1;
+    min-width: 0;
+    margin-left: 10px;
+    cursor: pointer
+}
+
+.addr-list-name {
+    font-size: 14px;
+    color: #333
+}
+
+.addr-list-mobile {
+    margin-left: 8px;
+    color: #666
+}
+
+.addr-list-detail {
+    margin-top: 3px;
+    font-size: 13px;
+    color: #888;
+    word-break: break-all
+}
+
+.addr-list-ops {
+    white-space: nowrap
+}
+
+.addr-list-ops a {
+    margin-left: 10px;
+    font-size: 13px;
+    color: #2b59c3;
+    text-decoration: none
+}
+
+.addr-list-ops a.del {
+    color: #e4393c
+}
+
+/* 列表中的设为默认（单选圆点） */
+.addr-list-ops a.addr-set-default {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 10px;
+    font-size: 13px;
+    color: #666;
+    text-decoration: none
+}
+
+.addr-set-default .addr-dot {
+    width: 12px;
+    height: 12px;
+    margin-right: 4px;
+    border: 1px solid #bbb;
+    border-radius: 50%;
+    background: #fff;
+    box-sizing: border-box
+}
+
+.addr-list-ops a.addr-set-default.on {
+    color: #4caf50;
+    font-weight: 700
+}
+
+.addr-set-default.on .addr-dot {
+    border-color: #4caf50;
+    background: radial-gradient(#4caf50 0 55%, #fff 56%)
+}
+
+.addr-list-empty {
+    padding: 24px 0;
+    text-align: center;
+    font-size: 14px;
+    color: #999
+}
+
+.addr-list-foot {
+    border-top: 1px solid #eee;
+    text-align: left
+}
+
+.btn-green {
+    color: #fff !important;
+    background: #4caf50 !important;
+    border-color: #4caf50 !important
+}
+
+.btn-green:hover {
+    background: #43a047 !important
+}
+
+.addr-default-field {
+    margin-bottom: 10px;
+    padding-left: 70px;
+    font-size: 14px;
+    color: #555
+}
+
+.addr-default-field input {
+    margin-right: 4px;
+    vertical-align: -2px
+}
+
+/* 订单确认页 logo 尺寸 */
+.cart .logoArea > a > .logo {
+    width: 185px;
+    height: 60px
+}
+
+.cart .logoArea > a > .logo > img {
+    width: 185px;
+    height: 60px
 }

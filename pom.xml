@@ -10,7 +10,6 @@
     <version>1.0.0</version>
     <modules>
         <module>sm-common</module>
-        <module>sm-service</module>
         <module>item-service</module>
         <module>cart-service</module>
         <module>sm-api</module>

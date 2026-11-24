@@ -4,3 +4,12 @@ server:
 sm:
   swagger:
     title: "星购商城交易服务接口文档"
+  seckill:
+    result-ttl-minutes: 30
+    activities:
+      - item-id: 100002672317
+        seckill-price: 499900
+        stock: 100
+      - item-id: 100002672313
+        seckill-price: 429900
+        stock: 100

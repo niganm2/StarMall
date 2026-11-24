@@ -21,6 +21,10 @@ public interface ICartService extends IService<Cart> {
 
     void addItem2Cart(CartFormDTO cartFormDTO);
 
+    void updateCart(Cart cart);
+
+    void removeMyCartItem(Long id);
+
     List<CartVO> queryMyCarts();
 
     void removeByItemIds(Collection<Long> itemIds);

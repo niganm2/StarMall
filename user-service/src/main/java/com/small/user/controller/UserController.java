@@ -2,6 +2,7 @@ package com.small.user.controller;
 
 
 import com.small.user.domain.dto.LoginFormDTO;
+import com.small.user.domain.dto.RegisterFormDTO;
 import com.small.user.domain.vo.UserLoginVO;
 import com.small.user.service.IUserService;
 import io.swagger.annotations.Api;
@@ -26,6 +27,12 @@ public class UserController {
         return userService.login(loginFormDTO);
     }
 
+    @ApiOperation("用户注册接口")
+    @PostMapping("register")
+    public void register(@RequestBody @Validated RegisterFormDTO registerFormDTO){
+        userService.register(registerFormDTO);
+    }
+
     @ApiOperation("扣减余额")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pw", value = "支付密码"),
@@ -34,6 +41,13 @@ public class UserController {
     @PutMapping("/money/deduct")
     public void deductMoney(@RequestParam("pw") String pw,@RequestParam("amount") Integer amount){
         userService.deductMoney(pw, amount);
+    }
+
+    @ApiOperation("退款到用户余额")
+    @ApiImplicitParam(name = "amount", value = "退款金额")
+    @PutMapping("/money/refund")
+    public void refundMoney(@RequestParam("amount") Integer amount){
+        userService.refundMoney(amount);
     }
 }
 

@@ -2,6 +2,8 @@ package com.small.item.handler;
 
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.small.api.dto.ItemDTO;
+import com.small.common.domain.PageDTO;
+import com.small.common.domain.PageQuery;
 import com.small.common.exception.BizIllegalException;
 
 import java.util.List;
@@ -18,5 +20,13 @@ public class ItemBlockHandler {
      */
     public static List<ItemDTO> queryByIds(List<Long> ids, BlockException e) {
         throw new BizIllegalException("商品查询请求过于频繁，请稍后重试！");
+    }
+
+    /**
+     * 商品分页并发线程数超限时的兜底处理。
+     * 快速失败，把线程让给搜索等其它接口，避免分页慢查询占满整个线程池造成雪崩。
+     */
+    public static PageDTO<ItemDTO> queryItemByPage(PageQuery query, BlockException e) {
+        throw new BizIllegalException("商品列表访问人数过多，请稍后重试！");
     }
 }

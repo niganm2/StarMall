@@ -11,83 +11,85 @@
   <link rel="stylesheet" type="text/css" href="./css/index.css"/>
   <link rel="stylesheet" type="text/css" href="./css/webbase.css"/>
   <link rel="stylesheet" type="text/css" href="./css/pages-login.css"/>
-  <link rel="stylesheet" type="text/css" href="./css/starmall-login.css?v=20261015"/>
+  <link rel="stylesheet" type="text/css" href="./css/starmall-login.css?v=20261202"/>
 </head>
 
 <body>
-<div class="login-box"  id="loginApp">
-  <top></top>
-  <!--head-->
-  <div class="py-container logoArea">
-    <div class="banner">
-      <div class="logo">
-        <img src="./img/logo.png?v=20261015" alt="星购商城 StarMall"/>
-      </div>
+<div class="login-box" id="loginApp">
+
+  <!--顶部 Logo-->
+  <header class="jd-header">
+    <div class="jd-header-inner">
+      <img src="./img/logo.png?v=20261015" alt="星购商城 StarMall" class="jd-logo">
+      <span class="jd-header-tip">欢迎登录星购商城</span>
     </div>
-  </div>
-  <!--loginArea-->
-  <div class="loginArea">
-    <div class="py-container login">
-      <div class="loginform">
-        <ul class="sui-nav nav-tabs tab-wraped">
-          <li>
-            <a href="#index" data-toggle="tab">
-              <h3>扫描登录</h3>
-            </a>
-          </li>
-          <li class="active">
-            <a href="#profile" data-toggle="tab">
-              <h3>账户登录</h3>
-            </a>
-          </li>
-        </ul>
-        <div class="tab-content tab-wraped">
-          <div id="index" class="tab-pane">
-            <p>二维码登录，暂为官网二维码</p>
-            <img src="./img/wx_cz.jpg"/>
-          </div>
-          <div id="profile" class="tab-pane  active">
-            <span v-text="msg"></span>
-            <form class="sui-form">
-              <div class="input-prepend"><span class="add-on loginname"></span>
-                <input id="username" type="text" placeholder="邮箱/用户名/手机号" class="span2 input-xfat"
-                       v-model="form.username">
-              </div>
-              <div class="input-prepend"><span class="add-on loginpwd"></span>
-                <input id="password" type="password" placeholder="请输入密码" class="span2 input-xfat"
-                       v-model="form.password">
-              </div>
-              <div class="setting">
-                <label class="checkbox inline">
-                  <input name="m1" type="checkbox" value="2" checked="">
-                  记住我
-                </label>
-                <span class="forget">忘记密码？</span>
-              </div>
-              <div class="logined">
-                <a class="sui-btn btn-block btn-xlarge btn-danger" @click="login"
-                   href="javascript:void(0)">登&nbsp;&nbsp;录</a>
-              </div>
-            </form>
-            <div class="otherlogin">
-              <div class="types">
-                <ul>
-                  <li><img src="./img/qq.png" width="35px" height="35px"/></li>
-                  <li><img src="./img/sina.png"/></li>
-                  <li><img src="./img/ali.png"/></li>
-                  <li><img src="./img/weixin.png"/></li>
-                </ul>
-              </div>
-              <span class="register"><a href="./index.html" target="_blank">立即注册</a></span>
-            </div>
-          </div>
+  </header>
+
+  <!--登录卡片-->
+  <main class="jd-main">
+    <div class="jd-card">
+
+      <!--左侧：扫码登录-->
+      <section class="jd-qr-area">
+        <h3 class="jd-qr-title">APP 扫码登录</h3>
+        <p class="jd-qr-sub">打开 <b>星购商城 APP</b>，点击右上角扫一扫</p>
+        <div class="jd-qr-box">
+          <img src="./img/erweima.png" alt="扫码登录二维码">
         </div>
-      </div>
+        <p class="jd-qr-tip">扫码登录更安全</p>
+      </section>
+
+      <!--右侧：表单登录-->
+      <section class="jd-form-area">
+        <div class="jd-tabs">
+          <a href="javascript:void(0)" :class="{active: loginType === 'pwd'}" @click="loginType = 'pwd'">密码登录</a>
+          <a href="javascript:void(0)" :class="{active: loginType === 'sms'}" @click="loginType = 'sms'">短信登录</a>
+        </div>
+
+        <!--密码登录-->
+        <form class="jd-form" v-show="loginType === 'pwd'" @submit.prevent="login">
+          <div class="jd-field">
+            <input id="username" type="text" placeholder="账号 / 用户名 / 手机号" v-model="form.username">
+          </div>
+          <div class="jd-field">
+            <input id="password" type="password" placeholder="密码" v-model="form.password">
+          </div>
+          <p class="jd-msg" v-text="msg"></p>
+          <button type="submit" class="jd-btn-login">登&nbsp;&nbsp;录</button>
+        </form>
+
+        <!--短信登录-->
+        <div class="jd-form" v-show="loginType === 'sms'">
+          <div class="jd-field">
+            <input type="text" placeholder="手机号">
+          </div>
+          <div class="jd-field jd-field-code">
+            <input type="text" placeholder="短信验证码">
+            <a href="javascript:void(0)" class="jd-getcode">获取验证码</a>
+          </div>
+          <p class="jd-msg">短信登录暂未开放，请使用密码登录</p>
+          <button type="button" class="jd-btn-login">登&nbsp;&nbsp;录</button>
+        </div>
+
+        <!--第三方登录与辅助链接-->
+        <div class="jd-links">
+          <span class="jd-third">
+            <img src="./img/weixin.png" alt="微信">微信登录
+            <i></i>
+            <img src="./img/qq.png" alt="QQ">QQ登录
+          </span>
+          <span class="jd-link-group">
+            <a href="javascript:void(0)">忘记密码</a>
+            <a href="./register.html">立即注册</a>
+          </span>
+        </div>
+      </section>
+
     </div>
-  </div>
+  </main>
 
   <!--底部版权-->
-  <div class="copyright">
+  <footer class="copyright jd-footer">
     <ul>
       <li>关于星购</li>
       <li>联系我们</li>
@@ -96,7 +98,7 @@
     </ul>
     <p>星购商城 StarMall 版权所有 ©2026</p>
     <p>客服热线：400-668-8899&nbsp;&nbsp;网址：http://www.starmall.com</p>
-  </div>
+  </footer>
 
 </div>
 
@@ -113,6 +115,7 @@
         username: '',
         password: ''
       },
+      loginType: 'pwd',
       msg: '',
       util
     },

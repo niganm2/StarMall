@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿﻿﻿﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -7,8 +7,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
   <title>结算页</title>
   <link rel="stylesheet" type="text/css" href="./css/webbase.css" />
-  <link rel="stylesheet" type="text/css" href="./css/pages-getOrderInfo.css" />
-  <link rel="stylesheet" type="text/css" href="./css/orderInfo.css" />
+  <link rel="stylesheet" type="text/css" href="./css/pages-getOrderInfo.css?v=202611241" />
+  <link rel="stylesheet" type="text/css" href="./css/orderInfo.css?v=202611246" />
+  <link rel="stylesheet" type="text/css" href="./css/top-bar.css?v=20261204" />
 </head>
 
 <body>
@@ -32,25 +33,17 @@
       <div class="checkout-steps">
         <!--收件人信息-->
         <div class="step-tit">
-          <h5>收件人信息<span><a class="newadd">新增收货地址</a></span></h5>
+          <h5>收件人信息<span><a class="newadd" @click="openAddressList">更换地址</a></span></h5>
         </div>
         <div class="step-cont">
           <div class="addressInfo">
-            <ul class="addr-detail">
-              <li class="addr-item">
-                <div v-for="addr in addressList" :key="addr.id" @click="params.addressId = addr.id">
-                  <div :class="{con:true, name:true, selected: addr.id === params.addressId}">
-                    <a href="javascript:;">{{addr.contact}}</a>
-                  </div>
-                  <div class="con address">
-                    {{addr.contact}}{{addr.province}}{{addr.city}}{{addr.town}}{{addr.street}}
-                    <span>{{handleMobile(addr.mobile)}}</span>
-                    <span v-if="addr.isDefault" class="base">默认地址</span>
-                  </div>
-                  <div class="clearfix"></div>
-                </div>
-              </li>
-            </ul>
+            <div class="addr-current" v-if="currentAddress" @click="openAddressList">
+              <span class="addr-current-name">{{currentAddress.contact}}</span>
+              <span class="addr-current-mobile">{{currentAddress.mobile}}</span>
+              <span class="addr-current-detail">{{fullAddress(currentAddress)}}</span>
+              <span v-if="currentAddress.isDefault === 1" class="base">默认</span>
+            </div>
+            <div class="no-address" v-else @click="openAddressList">暂无收货地址，点击“更换地址”添加</div>
           </div>
           <div class="hr"></div>
         </div>
@@ -78,20 +71,14 @@
                       </div>
                     </li>
                     <li class="yui3-u-1-12">
-                      <div>&nbsp;</div>
                       <div class="price">￥{{util.formatPrice(item.newPrice || item.price)}}</div>
                     </li>
                     <li class="yui3-u-1-12">
-                      <div style="width: 60px; text-align: right">
-                        <button class="num-btn" @click="incNum(item)">+</button>
-                        <div class="num">
-                          <span>×</span>&nbsp;&nbsp;&nbsp;<input style="width: 22px" type="text" v-model="item.num">
-                        </div>
-                        <button class="num-btn" @click="decNum(item)">-</button>
+                      <div class="num-box">
+                        <a href="javascript:void(0)" class="increment mins" @click="decNum(item)">-</a>
+                        <input autocomplete="off" type="text" v-model="item.num" class="itxt" />
+                        <a href="javascript:void(0)" class="increment plus" @click="incNum(item)">+</a>
                       </div>
-                    </li>
-                    <li class="yui3-u-1-12">
-                      <div class="exit">有货</div>
                     </li>
                   </ul>
                 </div>
@@ -127,11 +114,89 @@
       <a class="sui-btn btn-danger btn-xlarge" href="javascript:void(0)" @click="toPay">提交订单</a>
     </div>
   </div>
+
+  <!-- 选择收货地址弹窗 -->
+  <div class="addr-modal-mask" v-show="showAddrList" @click.self="showAddrList = false">
+    <div class="addr-modal addr-list-modal">
+      <div class="addr-modal-head">
+        选择收货地址
+        <span class="addr-modal-close" @click="showAddrList = false">×</span>
+      </div>
+      <div class="addr-list-toolbar">
+        <label class="addr-check-all">
+          <input type="checkbox" :checked="allChecked" @change="toggleAll" /> 全选
+        </label>
+        <button type="button" class="btn-batch-del" :disabled="checkedIds.length === 0"
+          @click="batchDelete">批量删除</button>
+      </div>
+      <div class="addr-list">
+        <div class="addr-list-item" :class="{active: a.id === params.addressId}" v-for="a in addressList" :key="a.id">
+          <input type="checkbox" :value="a.id" v-model="checkedIds" />
+          <div class="addr-list-info" @click="chooseAddress(a)">
+            <div class="addr-list-name">
+              {{a.contact}} <span class="addr-list-mobile">{{a.mobile}}</span>
+              <span v-if="a.isDefault === 1" class="base">默认</span>
+            </div>
+            <div class="addr-list-detail">{{fullAddress(a)}}</div>
+          </div>
+          <div class="addr-list-ops">
+            <a href="javascript:;" class="addr-set-default" :class="{on: a.isDefault === 1}" @click.stop="setDefault(a)">
+              <i class="addr-dot"></i>{{a.isDefault === 1 ? '默认地址' : '设为默认'}}
+            </a>
+            <a href="javascript:;" @click.stop="openEdit(a)">修改</a>
+            <a href="javascript:;" class="del" @click.stop="deleteOne(a)">删除</a>
+          </div>
+        </div>
+        <div class="addr-list-empty" v-if="addressList.length === 0">暂无收货地址</div>
+      </div>
+      <div class="addr-modal-foot addr-list-foot">
+        <button type="button" class="sui-btn btn-green" @click="openAdd">新增收货地址</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 新增/修改收货地址弹窗 -->
+  <div class="addr-modal-mask" v-show="showAddrModal" @click.self="showAddrModal = false">
+    <div class="addr-modal">
+      <div class="addr-modal-head">
+        {{addrEditId ? '修改收货地址' : '新增收货地址'}}
+        <span class="addr-modal-close" @click="showAddrModal = false">×</span>
+      </div>
+      <div class="addr-modal-body">
+        <div class="addr-parse">
+          <label>智能识别</label>
+          <textarea v-model="parseText" @input="parseAddress"
+            placeholder="可直接粘贴一段地址信息，例如：张三 13800138000 北京市海淀区中关村大街1号"></textarea>
+        </div>
+        <div class="addr-field">
+          <label>收货人</label>
+          <input v-model.trim="addrForm.contact" maxlength="20" placeholder="请输入姓名" />
+        </div>
+        <div class="addr-field">
+          <label>手机号</label>
+          <input v-model.trim="addrForm.mobile" maxlength="11" placeholder="请输入11位手机号" />
+        </div>
+        <div class="addr-field">
+          <label>详细地址</label>
+          <input v-model.trim="addrForm.street" maxlength="120" placeholder="省/市/区/街道及门牌号" />
+        </div>
+        <div class="addr-default-field">
+          <input type="checkbox" id="addrDefaultChk" v-model="addrDefault" />
+          <label for="addrDefaultChk">设为默认地址</label>
+        </div>
+        <div class="addr-error" v-show="addrError">{{addrError}}</div>
+      </div>
+      <div class="addr-modal-foot">
+        <button type="button" class="sui-btn" @click="showAddrModal = false">取消</button>
+        <button type="button" class="sui-btn btn-danger" @click="saveAddress">保存</button>
+      </div>
+    </div>
+  </div>
 </div>
   <script src="./js/vue.js"></script>
   <script src="./js/axios.min.js"></script>
   <script src="js/common.js"></script>
-  <script src="js/top.js"></script>
+  <script src="js/top.js?v=20261206"></script>
   <script>
     let orderApp = new Vue({
       el: "#orderApp",
@@ -144,8 +209,16 @@
           params: {
             details: [],
             paymentType: 3, // 支付方式
-            addressId: 61, // 收货地址的id
+            addressId: null, // 收货地址的id
           },
+          showAddrModal: false, // 新增/修改地址弹窗
+          showAddrList: false, // 地址列表弹窗
+          checkedIds: [], // 列表中勾选的地址id
+          addrEditId: null, // 正在修改的地址id，null表示新增
+          addrDefault: false, // 是否设为默认地址
+          parseText: "", // 智能识别的原始文本
+          addrError: "", // 表单校验错误
+          addrForm: { contact: "", mobile: "", street: "" },
           user: null,
         }
       },
@@ -161,32 +234,178 @@
       },
       methods: {
         getItem() {
-          this.items = util.store.get("selectedCarts");
+          this.items = util.store.get("selectedCarts") || [];
+          if (this.items.length < 1) {
+            alert("没有待结算的商品，请先选择商品");
+            location.href = "/search.html";
+          }
         },
         getAddress() {
           // 根据用户id查询地址列表
           axios.get("/addresses")
             .then(resp => {
-              if(resp && resp.length > 0){
-                this.addressList = resp
-              }else{
-                alert("当前用户没有地址，现在展示假数据")
-                this.addressList = [
-                  { "id": 61, "userId": 2, "contact": "李佳星", "mobile": "13301212233", "province": "上海", "city": "上海", "town": "浦东新区", "street": "航头镇航头路", "isDefault": true },
-                  { "id": 63, "userId": 2, "contact": "李小龙", "mobile": "13301212233", "province": "广东", "city": "佛山", "town": "永春", "street": "永春武馆", "isDefault": false },
-                ]
+              // 默认地址排在最上面
+              const list = (resp || []).slice();
+              list.sort((a, b) => (b.isDefault || 0) - (a.isDefault || 0));
+              this.addressList = list;
+              // 未选择地址时，优先选中默认地址
+              if (list.length > 0 && !list.some(a => a.id === this.params.addressId)) {
+                const def = list.find(a => a.isDefault === 1);
+                this.params.addressId = (def || list[0]).id;
               }
+              if (list.length === 0) {
+                this.params.addressId = null;
+              }
+              this.checkedIds = this.checkedIds.filter(id => list.some(a => a.id === id));
             })
-            .catch(err => {
-              this.addressList = [
-                { "id": 61, "userId": 2, "contact": "李佳星", "mobile": "13301212233", "province": "上海", "city": "上海", "town": "浦东新区", "street": "航头镇航头路", "isDefault": true },
-                { "id": 63, "userId": 2, "contact": "李小龙", "mobile": "13301212233", "province": "广东", "city": "佛山", "town": "永春", "street": "永春武馆", "isDefault": false },
-              ]
-              console.log("err")
+            .catch(() => {
+              this.addressList = [];
+            })
+        },
+        fullAddress(a) {
+          return (a.province || "") + (a.city || "") + (a.town || "") + (a.street || "");
+        },
+        openAddressList() {
+          this.checkedIds = [];
+          this.showAddrList = true;
+        },
+        chooseAddress(a) {
+          this.params.addressId = a.id;
+          this.showAddrList = false;
+        },
+        openAdd() {
+          this.showAddrList = false;
+          this.addrEditId = null;
+          this.addrForm = { contact: "", mobile: "", street: "" };
+          this.parseText = "";
+          this.addrDefault = false;
+          this.addrError = "";
+          this.showAddrModal = true;
+        },
+        openEdit(a) {
+          this.showAddrList = false;
+          this.addrEditId = a.id;
+          this.addrForm = { contact: a.contact, mobile: a.mobile, street: this.fullAddress(a) };
+          this.parseText = "";
+          this.addrDefault = a.isDefault === 1;
+          this.addrError = "";
+          this.showAddrModal = true;
+        },
+        setDefault(a) {
+          if (a.isDefault === 1) {
+            return;
+          }
+          if (!confirm("确定将【" + a.contact + "】的这个地址设为默认地址吗？")) {
+            return;
+          }
+          axios.put("/addresses/" + a.id + "/default")
+            .then(() => this.getAddress())
+            .catch(() => alert("设置默认地址失败，请重试"))
+        },
+        deleteOne(a) {
+          if (!confirm("确定删除该收货地址吗？")) {
+            return;
+          }
+          axios.delete("/addresses/" + a.id)
+            .then(() => {
+              if (a.id === this.params.addressId) {
+                this.params.addressId = null;
+              }
+              this.getAddress();
+            })
+            .catch(() => alert("删除失败，请重试"))
+        },
+        batchDelete() {
+          if (this.checkedIds.length === 0) {
+            return;
+          }
+          if (!confirm("确定删除选中的 " + this.checkedIds.length + " 个收货地址吗？")) {
+            return;
+          }
+          axios.delete("/addresses", { params: { ids: this.checkedIds.join(",") } })
+            .then(() => {
+              if (this.checkedIds.indexOf(this.params.addressId) > -1) {
+                this.params.addressId = null;
+              }
+              this.checkedIds = [];
+              this.getAddress();
+            })
+            .catch(() => alert("批量删除失败，请重试"))
+        },
+        toggleAll(e) {
+          this.checkedIds = e.target.checked ? this.addressList.map(a => a.id) : [];
+        },
+        // 从粘贴的一段文字里自动识别姓名、手机号、详细地址
+        parseAddress() {
+          const text = (this.parseText || "").trim();
+          if (!text) {
+            return;
+          }
+          const mobileMatch = text.match(/1[3-9]\d{9}/);
+          const mobile = mobileMatch ? mobileMatch[0] : "";
+          let rest = mobile ? text.replace(mobile, " ") : text;
+          // 姓名：优先取开头/结尾的 2~4 位纯中文
+          let contact = "";
+          const tokens = rest.split(/[\s,，;；]+/).filter(Boolean);
+          for (const t of tokens) {
+            if (/^[\u4e00-\u9fa5]{2,4}$/.test(t)) {
+              contact = t;
+              break;
             }
-            )
+          }
+          let street = rest;
+          if (contact) {
+            street = street.replace(contact, " ");
+          }
+          street = street.replace(/[\s,，;；]+/g, " ").trim();
+          if (mobile) this.addrForm.mobile = mobile;
+          if (contact) this.addrForm.contact = contact;
+          if (street) this.addrForm.street = street;
+        },
+        saveAddress() {
+          const { contact, mobile, street } = this.addrForm;
+          if (!contact) {
+            this.addrError = "请输入收货人姓名";
+            return;
+          }
+          if (!/^1[3-9]\d{9}$/.test(mobile)) {
+            this.addrError = "请输入正确的11位手机号";
+            return;
+          }
+          if (!street) {
+            this.addrError = "请输入详细地址";
+            return;
+          }
+          this.addrError = "";
+          const body = {
+            contact: contact,
+            mobile: mobile,
+            street: street,
+            province: "",
+            city: "",
+            town: "",
+            isDefault: this.addrDefault ? 1 : 0
+          };
+          const request = this.addrEditId
+            ? axios.put("/addresses/" + this.addrEditId, body)
+            : axios.post("/addresses", body);
+          request.then(id => {
+            this.showAddrModal = false;
+            // 新增后直接选中新地址；修改则保持当前选中
+            if (!this.addrEditId) {
+              this.params.addressId = id;
+            }
+            this.getAddress();
+          }).catch(err => {
+            this.addrError = (err && err.response && err.response.data && err.response.data.msg)
+              || "保存失败，请重试";
+          })
         },
         toPay() {
+          if (!this.params.addressId) {
+            alert("请先新增并选择收货地址");
+            return;
+          }
           // 发送ajax请求到微服务执行：下单、扣库存
           let details = [];
           this.items.forEach(({itemId, num}) => {
@@ -226,6 +445,15 @@
         }
       },
       computed: {
+        // 当前选中的收货地址
+        currentAddress() {
+          return this.addressList.find(addr => addr.id === this.params.addressId) || null;
+        },
+        // 地址列表是否已全选
+        allChecked() {
+          return this.addressList.length > 0
+            && this.checkedIds.length === this.addressList.length;
+        },
         address() {
           const address = this.addressList.find(addr => addr.id === this.params.addressId);
           if(!address){

@@ -30,8 +30,15 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         //1.获取request
         ServerHttpRequest request = exchange.getRequest();
-        //2.判断是否需要拦截
-        if (isExclude(request.getPath().toString())){
+        String path = request.getPath().toString();
+        //2.内部接口（余额变动、支付单内部查询/退款）禁止外部直接调用
+        if (isDenied(path)) {
+            ServerHttpResponse response = exchange.getResponse();
+            response.setStatusCode(HttpStatus.FORBIDDEN);
+            return response.setComplete();
+        }
+        //3.判断是否需要拦截
+        if (isExclude(path)){
             //放行
             return chain.filter(exchange);
         }
@@ -61,6 +68,16 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
                 .build();
         //6.放行 并且把swe传递给下一个过滤器
         return chain.filter(swe);
+    }
+
+    //判断是否为仅限内部调用的接口
+    private boolean isDenied(String path) {
+        for (String pathPattern : authProperties.getDenyPaths()) {
+            if (antPathMatcher.match(pathPattern, path)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //判断是否需要拦截

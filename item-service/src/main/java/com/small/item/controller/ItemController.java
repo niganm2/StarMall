@@ -1,7 +1,6 @@
 package com.small.item.controller;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.small.api.dto.ItemDTO;
 import com.small.api.dto.OrderDetailDTO;
 import com.small.common.domain.PageDTO;
@@ -28,11 +27,11 @@ public class ItemController {
 
     @ApiOperation("分页查询商品")
     @GetMapping("/page")
+    @SentinelResource(value = SentinelRuleConfig.ITEM_PAGE_RESOURCE,
+            blockHandler = "queryItemByPage", blockHandlerClass = ItemBlockHandler.class)
     public PageDTO<ItemDTO> queryItemByPage(PageQuery query) {
-        // 1.分页查询
-        Page<Item> result = itemService.page(query.toMpPage("update_time", false));
-        // 2.封装并返回
-        return PageDTO.of(result, ItemDTO.class);
+        // 限制页码上限 + 延迟关联，避免深分页慢查询拖垮数据库
+        return itemService.queryItemPage(query);
     }
 
     @ApiOperation("根据id批量查询商品")

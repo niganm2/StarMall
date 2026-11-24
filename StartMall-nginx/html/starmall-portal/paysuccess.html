@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿﻿﻿﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -10,6 +10,7 @@
 
   <link rel="stylesheet" type="text/css" href="./css/webbase.css"/>
   <link rel="stylesheet" type="text/css" href="./css/pages-paysuccess.css"/>
+  <link rel="stylesheet" type="text/css" href="./css/top-bar.css?v=20261204"/>
 </head>
 
 <body>
@@ -35,7 +36,7 @@
         <p>支付金额：￥{{util.formatPrice(order.totalFee)}}元</p>
         <p>预计{{sendDate}}到达</p>
         <p class="button">
-          <a href="/myOrder.html" class="sui-btn btn-xlarge btn-danger">查看订单</a>&nbsp;&nbsp;&nbsp;&nbsp;
+          <a href="/orders.html" class="sui-btn btn-xlarge btn-danger">查看订单</a>&nbsp;&nbsp;&nbsp;&nbsp;
           <a href="/index.html" class="sui-btn btn-xlarge ">继续购物</a>
         </p>
       </div>
@@ -47,7 +48,7 @@
 <script src="./js/vue.js"></script>
 <script src="./js/axios.min.js"></script>
 <script src="js/common.js"></script>
-<script src="js/top.js"></script>
+<script src="js/top.js?v=20261206"></script>
 <script>
   let app = new Vue({
     el: "#app",

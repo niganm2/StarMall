@@ -1,0 +1,166 @@
+/* ============================================================
+   顶部快捷栏样式（top.js 组件共用，需在其它 CSS 之后引入）
+   主色：星空蓝 #2B59C3
+   ============================================================ */
+
+.top {
+  background-color: #EAEAEA;
+}
+
+/* 整条顶栏：左右两端对齐，垂直居中 */
+.top .shortcut {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: auto;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+
+/* 去掉原有的浮动与列表默认样式 */
+.top .shortcut ul.fl,
+.top .shortcut ul.fr {
+  margin: 0;
+  padding: 0;
+  float: none;
+  list-style: none;
+}
+
+/* ---- 左侧：欢迎语 + 用户名 + 退出登录 ---- */
+.top .shortcut ul.fl {
+  display: flex;
+  align-items: center;
+}
+
+.top .shortcut ul.fl .f-item {
+  float: none;
+  margin: 0;
+  padding: 0;
+  line-height: 20px;
+}
+
+.top .top-hello,
+.top .top-username {
+  font-size: 12px;
+  line-height: 20px;
+  color: #333333;
+}
+
+.top .top-username {
+  margin-left: 3px;
+  color: #2B59C3 !important;
+  font-weight: 600;
+}
+
+.top .top-logout {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 3px 12px;
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 20px;
+  vertical-align: middle;
+  color: #FFFFFF !important;
+  background-color: #2B59C3;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color .2s;
+}
+
+.top .top-logout:hover {
+  background-color: #E1251B;
+  color: #FFFFFF !important;
+}
+
+.top .top-login,
+.top .top-register {
+  font-size: 12px;
+  color: #2B59C3 !important;
+  text-decoration: none;
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.top .top-login {
+  margin-right: 12px;
+}
+
+.top .top-register {
+  margin-right: 10px;
+}
+
+/* ---- 右侧导航：每项独立圆角卡片 ---- */
+.top .top-menu {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.top .top-menu .f-item {
+  float: none;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+.top .top-menu .f-item a {
+  display: inline-block;
+  padding: 4px 12px;
+  font-size: 12px;
+  line-height: 20px;
+  color: #333333 !important;
+  text-decoration: none;
+  background-color: #FFFFFF;
+  border: none;
+  border-radius: 5px;
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color .2s, color .2s;
+}
+
+/* 悬浮：主题蓝底 + 白色文字 */
+.top .top-menu .f-item a:hover,
+.top .top-menu .f-item a:focus {
+  background-color: #2B59C3;
+  color: #FFFFFF !important;
+  text-decoration: none;
+}
+
+/* 当前页面：蓝色高亮常驻 */
+.top .top-menu .f-item.active a,
+.top .top-menu .f-item.active a:hover,
+.top .top-menu .f-item.active a:focus {
+  background-color: #2B59C3;
+  color: #FFFFFF !important;
+}
+
+/* 订单数量角标 */
+.top .top-menu .f-item a .top-badge {
+  display: inline-block;
+  min-width: 16px;
+  height: 16px;
+  margin-left: 4px;
+  padding: 0 4px;
+  font-size: 11px;
+  font-style: normal;
+  line-height: 16px;
+  text-align: center;
+  color: #FFFFFF !important;
+  background-color: #E1251B;
+  border-radius: 8px;
+  vertical-align: 1px;
+  box-sizing: border-box;
+}
+
+/* ---- 窄屏：允许换行，维持均匀间距 ---- */
+@media (max-width: 1260px) {
+  .top .shortcut {
+    flex-wrap: wrap;
+    padding: 6px 20px;
+    row-gap: 6px;
+  }
+}
