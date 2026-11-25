@@ -38,8 +38,8 @@ scripts/loadtest/
 ### Mac OS ###
 .DS_Store
 
-### 测试脚本与测试产物，不上传 ###
-测试脚本/
+### 测试产物（运行时生成），不上传；JMeter 脚本本体纳入版本控制 ###
+测试脚本/*.jtl
 测试报告-*.md
 _order_test_result.json
 docs/seckill/
